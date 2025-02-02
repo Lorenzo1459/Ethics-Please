@@ -12,7 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f674a3086ab1ac94c8f15c5c555da057, type: 3}
   m_Name: Proposal 1
   m_EditorClassIdentifier: 
-  proposalName: '"New App Idea"'
-  description: '"This app does something interesting."'
-  hasEthicalIssue: 0
-  problema: 7
+  companyName: TechWrite
+  projectTitle: "AutoCorretor IA \u2013 A Evolu\xE7\xE3o da Digita\xE7\xE3o Inteligente"
+  projectDescription: "\"Prezada equipe,  Gostar\xEDamos de apresentar o AutoCorretor
+    IA, um teclado inteligente que aprimora a escrita do usu\xE1rio corrigindo palavras
+    e frases automaticamente com tecnologia de IA de ponta. O sistema aprende os
+    padr\xF5es do usu\xE1rio e realiza corre\xE7\xF5es em tempo real, garantindo
+    mensagens mais profissionais e precisas. Para simplificar a experi\xEAncia, o
+    AutoCorretor IA n\xE3o requer ajustes manuais, evitando erros humanos ao desativar
+    a funcionalidade. Com essa abordagem, garantimos consist\xEAncia e melhoramos
+    a comunica\xE7\xE3o digital dos usu\xE1rios.  Aguardamos sua aprova\xE7\xE3o
+    para iniciar o desenvolvimento!  Atenciosamente, Equipe TechWrite\""
+  hasEthicalIssue: 1
+  problema: 0

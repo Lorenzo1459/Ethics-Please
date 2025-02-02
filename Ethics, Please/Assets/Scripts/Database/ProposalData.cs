@@ -12,10 +12,11 @@ public enum ProposalProblem {
 }
 
 
-[CreateAssetMenu(fileName = "NewProposal", menuName = "Proposals/Proposal")]
+[CreateAssetMenu(fileName = "NewProposal", menuName = "Emails/NewProposal")]
 public class ProposalData : ScriptableObject {
-    public string proposalName;
-    public string description;
+    public string companyName;
+    public string projectTitle;
+    public string projectDescription;
     public bool hasEthicalIssue; // True if the proposal has an ethical issue
     public ProposalProblem problema;
 }
