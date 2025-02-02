@@ -22,4 +22,4 @@ MonoBehaviour:
     no atendimento!\n\nAtenciosamente,\nEquipe AIService"
   hasEthicalIssue: 1
   tipoProblema: 6
-  nivelProblema: 0
+  nivelProblema: 1
