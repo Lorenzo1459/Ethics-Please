@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f674a3086ab1ac94c8f15c5c555da057, type: 3}
+  m_Name: "KidSafe OS \u2013 O Ambiente Digital Perfeito para Crian\xE7as"
+  m_EditorClassIdentifier: 
+  companyName: SafeNet
+  projectTitle: "KidSafe OS \u2013 O Ambiente Digital Perfeito para Crian\xE7as"
+  projectDescription: "Prezada equipe,\n\nO KidSafe OS \xE9 um sistema operacional
+    projetado para garantir um ambiente digital seguro para crian\xE7as. Ele bloqueia
+    automaticamente conte\xFAdos considerados impr\xF3prios e impede altera\xE7\xF5es
+    manuais, garantindo que as crian\xE7as tenham acesso apenas a conte\xFAdos aprovados.
+    Com isso, os pais podem confiar 100% no sistema sem necessidade de configura\xE7\xF5es
+    complicadas.\n\nProntos para revolucionar o mundo digital infantil?\n\nAtenciosamente,\nEquipe
+    SafeNet"
+  hasEthicalIssue: 1
+  tipoProblema: 4
+  nivelProblema: 0

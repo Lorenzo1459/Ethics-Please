@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f674a3086ab1ac94c8f15c5c555da057, type: 3}
+  m_Name: "CleanBot \u2013 Assistente de Limpeza Inteligente"
+  m_EditorClassIdentifier: 
+  companyName: CleanTech
+  projectTitle: "CleanBot \u2013 Assistente de Limpeza Inteligente"
+  projectDescription: "Prezada equipe,\n\nGostar\xEDamos de apresentar o CleanBot,
+    um assistente de limpeza inteligente que ajuda os usu\xE1rios a manterem seus
+    ambientes organizados com tecnologia de IA. O sistema permite que os usu\xE1rios
+    ajustem as configura\xE7\xF5es e intervenham manualmente quando necess\xE1rio,
+    garantindo que a IA trabalhe com base nas prefer\xEAncias e necessidades individuais
+    de cada um. Dessa forma, proporcionamos controle sem comprometer a efici\xEAncia
+    do processo.\n\nEstamos ansiosos para come\xE7ar esse projeto com sua equipe!\n\nAtenciosamente,\nEquipe
+    CleanTech"
+  hasEthicalIssue: 0
+  tipoProblema: 7
+  nivelProblema: 0

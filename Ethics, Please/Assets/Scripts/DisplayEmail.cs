@@ -23,6 +23,7 @@ public class DisplayEmail : MonoBehaviour {
     void Start() {
         companyNameText.text = proposalData.companyName;
         projectTitleText.text = proposalData.projectTitle;
+        projectDescriptionText.text = proposalData.projectDescription.Replace("\\n", "\n");
         projectDescriptionText.text = proposalData.projectDescription;
 
     }

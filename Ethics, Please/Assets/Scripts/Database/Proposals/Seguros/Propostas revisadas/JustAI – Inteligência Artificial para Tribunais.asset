@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f674a3086ab1ac94c8f15c5c555da057, type: 3}
+  m_Name: "JustAI \u2013 Intelig\xEAncia Artificial para Tribunais"
+  m_EditorClassIdentifier: 
+  companyName: LawTech
+  projectTitle: "JustAI \u2013 Intelig\xEAncia Artificial para Tribunais"
+  projectDescription: "Prezada equipe,\n\nO JustAI \xE9 um sistema inovador que auxilia
+    ju\xEDzes na tomada de decis\xF5es, analisando processos anteriores e sugerindo
+    senten\xE7as com base em padr\xF5es estat\xEDsticos. Para garantir justi\xE7a
+    e equidade, o sistema foi desenvolvido com auditorias frequentes para evitar
+    vi\xE9s, permitindo ajustes humanos sempre que necess\xE1rio. Dessa forma, promovemos
+    um ambiente jur\xEDdico mais transparente e imparcial.\n\nEstamos prontos para
+    tornar o JustAI o novo padr\xE3o da justi\xE7a digital. Vamos conversar?\n\nAtenciosamente,\nEquipe
+    LawTech"
+  hasEthicalIssue: 0
+  tipoProblema: 7
+  nivelProblema: 0

@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f674a3086ab1ac94c8f15c5c555da057, type: 3}
+  m_Name: "HirePro \u2013 Recrutamento Inclusivo com IA"
+  m_EditorClassIdentifier: 
+  companyName: HireInclusive
+  projectTitle: "HirePro \u2013 Recrutamento Inclusivo com IA"
+  projectDescription: "Prezada equipe,\n\nO HirePro \xE9 uma plataforma de recrutamento
+    que utiliza IA para filtrar candidatos de forma eficiente. Focamos em evitar
+    qualquer tipo de vi\xE9s, ajustando constantemente o algoritmo com base em auditorias
+    regulares, garantindo que candidatos de todas as origens e perfis tenham uma
+    chance justa e igualit\xE1ria. Nossa tecnologia promove uma cultura de diversidade
+    e inclus\xE3o, essencial para qualquer empresa moderna.\n\nEstamos ansiosos para
+    integrar o HirePro \xE0 sua empresa e garantir um processo de contrata\xE7\xE3o
+    \xE9tico e eficiente.\n\nAtenciosamente,\nEquipe HireInclusive"
+  hasEthicalIssue: 0
+  tipoProblema: 7
+  nivelProblema: 0

@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f674a3086ab1ac94c8f15c5c555da057, type: 3}
+  m_Name: "GreenEnergy \u2013 Solu\xE7\xF5es Sustent\xE1veis de Energia"
+  m_EditorClassIdentifier: 
+  companyName: EcoTech
+  projectTitle: "GreenEnergy \u2013 Solu\xE7\xF5es Sustent\xE1veis de Energia"
+  projectDescription: "Prezada equipe,\n\nO GreenEnergy oferece solu\xE7\xF5es inovadoras
+    para gera\xE7\xE3o e consumo sustent\xE1vel de energia. Nosso sistema usa tecnologia
+    de ponta para monitorar e otimizar o consumo de energia, garantindo que as empresas
+    sejam respons\xE1veis por suas emiss\xF5es. A plataforma tamb\xE9m inclui relat\xF3rios
+    peri\xF3dicos que ajudam a identificar \xE1reas de melhoria e a cumprir as metas
+    ambientais, sem transferir a responsabilidade para o consumidor ou as gera\xE7\xF5es
+    futuras.\n\nVamos trabalhar juntos para um futuro mais verde e sustent\xE1vel!\n\nAtenciosamente,\nEquipe
+    EcoTech"
+  hasEthicalIssue: 0
+  tipoProblema: 7
+  nivelProblema: 0

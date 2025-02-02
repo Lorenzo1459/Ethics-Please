@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f674a3086ab1ac94c8f15c5c555da057, type: 3}
+  m_Name: "SecureMail \u2013 Sistema de E-mails Seguros"
+  m_EditorClassIdentifier: 
+  companyName: PrivacyTech
+  projectTitle: "SecureMail \u2013 Sistema de E-mails Seguros"
+  projectDescription: "Prezada equipe,\n\nGostar\xEDamos de apresentar o SecureMail,
+    uma plataforma de e-mail focada em prote\xE7\xE3o de dados. Nosso sistema garante
+    criptografia de ponta a ponta, garantindo que apenas os destinat\xE1rios possam
+    ler as mensagens. O usu\xE1rio tem total controle sobre as configura\xE7\xF5es
+    de privacidade e pode escolher o n\xEDvel de seguran\xE7a desejado, incluindo
+    prote\xE7\xE3o contra rastreamento e coleta de dados n\xE3o autorizada.\n\nVamos
+    criar um ambiente digital mais seguro para todos?\n\nAtenciosamente,\nEquipe
+    PrivacyTech"
+  hasEthicalIssue: 0
+  tipoProblema: 7
+  nivelProblema: 0

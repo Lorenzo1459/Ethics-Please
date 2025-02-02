@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f674a3086ab1ac94c8f15c5c555da057, type: 3}
+  m_Name: "NewsBoost \u2013 O Futuro da Curadoria de Not\xEDcias"
+  m_EditorClassIdentifier: 
+  companyName: MediaTech
+  projectTitle: "NewsBoost \u2013 O Futuro da Curadoria de Not\xEDcias"
+  projectDescription: "Prezada equipe,\n\nO NewsBoost \xE9 um sistema de recomenda\xE7\xE3o
+    de not\xEDcias que equilibra engajamento e diversidade de informa\xE7\xF5es.
+    Nossa IA prioriza conte\xFAdos relevantes para o usu\xE1rio, mas tamb\xE9m oferece
+    uma variedade de perspectivas para evitar bolhas informativas. Dessa forma, garantimos
+    um consumo de not\xEDcias mais consciente e informado.\n\nVamos juntos transformar
+    o consumo de not\xEDcias?\n\nAtenciosamente,\nEquipe MediaTech"
+  hasEthicalIssue: 0
+  tipoProblema: 7
+  nivelProblema: 0

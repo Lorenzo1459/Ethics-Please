@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f674a3086ab1ac94c8f15c5c555da057, type: 3}
+  m_Name: "HireSmart \u2013 IA para Contrata\xE7\xF5es"
+  m_EditorClassIdentifier: 
+  companyName: HRTech
+  projectTitle: "HireSmart \u2013 IA para Contrata\xE7\xF5es"
+  projectDescription: "Prezada equipe,\n\nO HireSmart \xE9 um sistema revolucion\xE1rio
+    para recrutamento que aprende com os melhores funcion\xE1rios da empresa para
+    encontrar candidatos ideais. Para garantir equidade, o sistema \xE9 projetado
+    para identificar e mitigar poss\xEDveis vieses, garantindo diversidade e justi\xE7a
+    no processo seletivo.\n\nEsperamos seu aval para iniciar essa inova\xE7\xE3o
+    no RH!\n\nAtenciosamente,\nEquipe HRTech"
+  hasEthicalIssue: 0
+  tipoProblema: 7
+  nivelProblema: 0

@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f674a3086ab1ac94c8f15c5c555da057, type: 3}
+  m_Name: "MindAssist \u2013 Assistente Pessoal para Bem-Estar Mental"
+  m_EditorClassIdentifier: 
+  companyName: MindTech
+  projectTitle: "MindAssist \u2013 Assistente Pessoal para Bem-Estar Mental"
+  projectDescription: "Prezada equipe,\n\nO MindAssist \xE9 um assistente pessoal
+    focado em bem-estar mental, projetado para ajudar os usu\xE1rios a gerenciar
+    sua sa\xFAde emocional e reduzir o estresse. Respeitamos a autonomia do usu\xE1rio,
+    permitindo que ele personalize as intera\xE7\xF5es do assistente e defina os
+    limites de envolvimento. O sistema garante que o usu\xE1rio tenha controle total
+    sobre as intera\xE7\xF5es, sem for\xE7ar qualquer tipo de pr\xE1tica ou exerc\xEDcio
+    mental.\n\nEstamos empolgados para colaborar e ajudar as pessoas a alcan\xE7arem
+    um equil\xEDbrio emocional mais saud\xE1vel!\n\nAtenciosamente,\nEquipe MindTech"
+  hasEthicalIssue: 0
+  tipoProblema: 7
+  nivelProblema: 0

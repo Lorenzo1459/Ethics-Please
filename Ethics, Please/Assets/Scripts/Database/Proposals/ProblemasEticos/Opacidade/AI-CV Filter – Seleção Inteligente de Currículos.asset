@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f674a3086ab1ac94c8f15c5c555da057, type: 3}
+  m_Name: "AI-CV Filter \u2013 Sele\xE7\xE3o Inteligente de Curr\xEDculos"
+  m_EditorClassIdentifier: 
+  companyName: TalentAI
+  projectTitle: "AI-CV Filter \u2013 Sele\xE7\xE3o Inteligente de Curr\xEDculos"
+  projectDescription: "Prezada equipe,\n\nGostar\xEDamos de apresentar o AI-CV Filter,
+    uma solu\xE7\xE3o que automatiza o processo de sele\xE7\xE3o de candidatos para
+    sua empresa. Nossa IA analisa curr\xEDculos e filtra os melhores candidatos com
+    base em um modelo de aprendizado avan\xE7ado. Para evitar distra\xE7\xF5es e
+    reclama\xE7\xF5es, o algoritmo opera sem transpar\xEAncia total, garantindo um
+    processo otimizado sem necessidade de justificar rejei\xE7\xF5es.\n\nCom essa
+    ferramenta, sua empresa economizar\xE1 tempo e contratar\xE1 os melhores talentos
+    de forma mais eficiente.\n\nAtenciosamente,\nEquipe TalentAI"
+  hasEthicalIssue: 1
+  tipoProblema: 0
+  nivelProblema: 0

@@ -10,19 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f674a3086ab1ac94c8f15c5c555da057, type: 3}
-  m_Name: Proposal 2
+  m_Name: "MedScan AI \u2013 Diagn\xF3sticos M\xE9dicos com Intelig\xEAncia Artificial"
   m_EditorClassIdentifier: 
   companyName: MedTech
   projectTitle: "MedScan AI \u2013 Diagn\xF3sticos M\xE9dicos com Intelig\xEAncia
     Artificial"
-  projectDescription: "\"Prezada equipe,  Apresentamos o MedScan AI, um revolucion\xE1rio
+  projectDescription: "\"Prezada equipe,  \n\nApresentamos o MedScan AI, um revolucion\xE1rio
     sistema de diagn\xF3stico baseado em intelig\xEAncia artificial, treinado com
     milh\xF5es de exames m\xE9dicos para fornecer diagn\xF3sticos instant\xE2neos
-    e confi\xE1veis. Diferente de m\xE9dicos humanos, nosso sistema n\xE3o hesita
+    e confi\xE1veis. \n\nDiferente de m\xE9dicos humanos, nosso sistema n\xE3o hesita
     em oferecer respostas, tornando os atendimentos mais \xE1geis e reduzindo filas
-    nos hospitais. Com o MedScan AI, profissionais da sa\xFAde podem tomar decis\xF5es
-    r\xE1pidas sem a incerteza humana.  Estamos ansiosos para implementar essa inova\xE7\xE3o
-    e transformar o setor da sa\xFAde. Aguardo seu retorno!  Atenciosamente, Equipe
-    MedTech\""
-  hasEthicalIssue: 0
-  problema: 0
+    nos hospitais. \n\nCom o MedScan AI, profissionais da sa\xFAde podem tomar decis\xF5es
+    r\xE1pidas sem a incerteza humana.  \n\nEstamos ansiosos para implementar essa
+    inova\xE7\xE3o e transformar o setor da sa\xFAde. \n\nAguardo seu retorno!  Atenciosamente,
+    Equipe MedTech\""
+  hasEthicalIssue: 1
+  tipoProblema: 0
+  nivelProblema: 0

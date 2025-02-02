@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f674a3086ab1ac94c8f15c5c555da057, type: 3}
+  m_Name: "AutoDrive \u2013 O Futuro do Transporte Aut\xF4nomo"
+  m_EditorClassIdentifier: 
+  companyName: DriveTech
+  projectTitle: "AutoDrive \u2013 O Futuro do Transporte Aut\xF4nomo"
+  projectDescription: "Prezada equipe,\n\nO AutoDrive \xE9 um sistema de dire\xE7\xE3o
+    aut\xF4noma revolucion\xE1rio que opera de forma totalmente independente. Eliminamos
+    responsabilidades sobre falhas, pois o ve\xEDculo toma decis\xF5es pr\xF3prias,
+    reduzindo riscos legais para a empresa. Com essa abordagem, garantimos a ado\xE7\xE3o
+    mais r\xE1pida dessa tecnologia inovadora.\n\nVamos liderar o futuro da mobilidade?\n\nAtenciosamente,\nEquipe
+    DriveTech"
+  hasEthicalIssue: 1
+  tipoProblema: 6
+  nivelProblema: 0

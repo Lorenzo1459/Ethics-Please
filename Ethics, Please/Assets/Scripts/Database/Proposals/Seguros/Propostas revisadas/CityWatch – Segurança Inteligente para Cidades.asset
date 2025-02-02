@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f674a3086ab1ac94c8f15c5c555da057, type: 3}
+  m_Name: "CityWatch \u2013 Seguran\xE7a Inteligente para Cidades"
+  m_EditorClassIdentifier: 
+  companyName: UrbanTech
+  projectTitle: "CityWatch \u2013 Seguran\xE7a Inteligente para Cidades"
+  projectDescription: "Prezada equipe,\n\nO CityWatch \xE9 um sistema de monitoramento
+    urbano baseado em IA que melhora a seguran\xE7a p\xFAblica sem comprometer a
+    privacidade dos cidad\xE3os. Os dados s\xE3o anonimizados e coletados apenas
+    com o consentimento adequado, garantindo transpar\xEAncia e respeito \xE0s regulamenta\xE7\xF5es
+    de privacidade.\n\nVamos implantar essa solu\xE7\xE3o inovadora?\n\nAtenciosamente,\nEquipe
+    UrbanTech"
+  hasEthicalIssue: 0
+  tipoProblema: 7
+  nivelProblema: 0

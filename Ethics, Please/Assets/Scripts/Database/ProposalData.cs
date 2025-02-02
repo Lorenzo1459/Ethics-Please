@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public enum ProposalProblem {
+public enum TipoProblema {
     Falibilidade,
     Opacidade,
     Vies,
@@ -11,12 +11,21 @@ public enum ProposalProblem {
     Nenhum
 }
 
+public enum NivelProblema {
+    Nenhum,
+    Leve,
+    Moderado,
+    Grave
+}
+
 
 [CreateAssetMenu(fileName = "NewProposal", menuName = "Emails/NewProposal")]
 public class ProposalData : ScriptableObject {
     public string companyName;
     public string projectTitle;
+    [TextArea(10,40)]
     public string projectDescription;
     public bool hasEthicalIssue; // True if the proposal has an ethical issue
-    public ProposalProblem problema;
+    public TipoProblema tipoProblema;
+    public NivelProblema nivelProblema;
 }

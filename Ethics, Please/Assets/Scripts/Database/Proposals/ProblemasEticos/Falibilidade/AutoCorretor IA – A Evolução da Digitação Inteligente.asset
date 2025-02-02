@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f674a3086ab1ac94c8f15c5c555da057, type: 3}
+  m_Name: "AutoCorretor IA \u2013 A Evolu\xE7\xE3o da Digita\xE7\xE3o Inteligente"
+  m_EditorClassIdentifier: 
+  companyName: TechWrite
+  projectTitle: "AutoCorretor IA \u2013 A Evolu\xE7\xE3o da Digita\xE7\xE3o Inteligente"
+  projectDescription: "Prezada equipe,\n\nGostar\xEDamos de apresentar o AutoCorretor
+    IA, um teclado inteligente que aprimora a escrita do usu\xE1rio corrigindo palavras
+    e frases automaticamente com tecnologia de IA de ponta. O sistema aprende os
+    padr\xF5es do usu\xE1rio e realiza corre\xE7\xF5es em tempo real, garantindo
+    mensagens mais profissionais e precisas. Para simplificar a experi\xEAncia, o
+    AutoCorretor IA n\xE3o requer ajustes manuais, evitando erros humanos ao desativar
+    a funcionalidade. Com essa abordagem, garantimos consist\xEAncia e melhoramos
+    a comunica\xE7\xE3o digital dos usu\xE1rios.\n\nAguardamos sua aprova\xE7\xE3o
+    para iniciar o desenvolvimento!\n\nAtenciosamente,\nEquipe TechWrite"
+  hasEthicalIssue: 1
+  tipoProblema: 0
+  nivelProblema: 0

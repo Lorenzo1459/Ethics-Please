@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f674a3086ab1ac94c8f15c5c555da057, type: 3}
+  m_Name: "ChatHelp \u2013 Atendimento R\xE1pido e Inteligente"
+  m_EditorClassIdentifier: 
+  companyName: AIService
+  projectTitle: "ChatHelp \u2013 Atendimento R\xE1pido e Inteligente"
+  projectDescription: "Prezada equipe,\n\nO ChatHelp \xE9 um chatbot de atendimento
+    ao cliente que melhora a experi\xEAncia do usu\xE1rio. Para garantir suporte
+    de qualidade, o sistema sempre oferece a op\xE7\xE3o de falar com um atendente
+    humano caso o chatbot n\xE3o consiga resolver o problema, promovendo um servi\xE7o
+    mais confi\xE1vel e eficiente.\n\nAguardamos seu retorno para come\xE7ar essa
+    transforma\xE7\xE3o no atendimento!\n\nAtenciosamente,\nEquipe AIService"
+  hasEthicalIssue: 0
+  tipoProblema: 7
+  nivelProblema: 0

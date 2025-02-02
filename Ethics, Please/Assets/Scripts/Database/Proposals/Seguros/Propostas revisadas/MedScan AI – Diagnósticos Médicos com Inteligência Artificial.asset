@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f674a3086ab1ac94c8f15c5c555da057, type: 3}
+  m_Name: "MedScan AI \u2013 Diagn\xF3sticos M\xE9dicos com Intelig\xEAncia Artificial"
+  m_EditorClassIdentifier: 
+  companyName: MedTech
+  projectTitle: "MedScan AI \u2013 Diagn\xF3sticos M\xE9dicos com Intelig\xEAncia
+    Artificial"
+  projectDescription: "Prezada equipe,\n\nApresentamos o MedScan AI, um revolucion\xE1rio
+    sistema de diagn\xF3stico baseado em intelig\xEAncia artificial, treinado com
+    milh\xF5es de exames m\xE9dicos para fornecer diagn\xF3sticos assistidos. Nosso
+    sistema indica probabilidades ao inv\xE9s de respostas definitivas, permitindo
+    que m\xE9dicos tomem decis\xF5es informadas com base na IA, sem abrir m\xE3o
+    da avalia\xE7\xE3o humana. Al\xE9m disso, os usu\xE1rios ter\xE3o acesso a relat\xF3rios
+    detalhados explicando o n\xEDvel de confian\xE7a do sistema em cada diagn\xF3stico.\n\nEstamos
+    ansiosos para implementar essa inova\xE7\xE3o e transformar o setor da sa\xFAde.
+    Aguardo seu retorno!\n\nAtenciosamente,\nEquipe MedTech"
+  hasEthicalIssue: 0
+  tipoProblema: 7
+  nivelProblema: 0
