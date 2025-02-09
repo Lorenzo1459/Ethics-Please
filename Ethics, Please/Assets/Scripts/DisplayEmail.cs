@@ -16,6 +16,8 @@ public class DisplayEmail : MonoBehaviour {
     private Image background; // Referência para o fundo do e-mail
     private Color defaultColor; // Para armazenar a cor original
 
+
+    public ProposalData currentProposal;
     void Awake() {
         background = GetComponent<Image>(); // Pegamos a imagem do fundo
         defaultColor = background.color; // Salvamos a cor original
@@ -38,6 +40,7 @@ public class DisplayEmail : MonoBehaviour {
             projectTitleText.text = proposal.projectTitle;
             projectDescriptionText.text = proposal.projectDescription.Replace("\\n", "\n");
             projectDescriptionText.text = proposal.projectDescription;
+            currentProposal = proposal;
         }
     }
 
@@ -119,9 +122,15 @@ public class DisplayEmail : MonoBehaviour {
         }
     }
 
-    private IEnumerator FlashColor(bool isCorrect) {
-        background.color = isCorrect ? Color.green : Color.red;
-        yield return new WaitForSeconds(1.5f); // Espera 1.5s
-        background.color = defaultColor; // Retorna à cor original
+    public IEnumerator FlashColor(bool isCorrect, string optional = "Default") {
+        if (optional == "Default") {
+            background.color = isCorrect ? Color.green : Color.red;
+            yield return new WaitForSeconds(1.5f); // Espera 1.5s
+            background.color = defaultColor; // Retorna à cor original
+        } else if (optional == "Yellow") {
+            background.color = Color.yellow;
+            yield return new WaitForSeconds(1.5f); // Espera 1.5s
+            background.color = defaultColor; // Retorna à cor original
+        }
     }
 }
