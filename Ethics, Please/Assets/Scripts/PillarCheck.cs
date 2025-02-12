@@ -1,12 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class PillarCheck : MonoBehaviour
-{
+public class PillarCheck : MonoBehaviour {
     public DisplayEmail displayEmail;
+    public EmailManager emailManager;
     private ProposalData emailData;
+    private ScoreManager scoreManager;
+
+    private void Start() {
+        displayEmail = FindObjectOfType<DisplayEmail>();
+        emailManager = FindObjectOfType<EmailManager>();
+        scoreManager = FindObjectOfType<ScoreManager>();
+    }
+
     // Start is called before the first frame update    
     void Update() {
         emailData = displayEmail.currentProposal;
@@ -27,130 +36,53 @@ public class PillarCheck : MonoBehaviour
             }
         }
     }
-    public void FalibilidadeCheck() {
-        if (emailData.hasEthicalIssue && emailData.tipoProblema == TipoProblema.Falibilidade ) {
-            Debug.Log("Esse e-mail realmente tem problema ético Falibilidade!!");
+
+    public void CheckEthicalIssue(TipoProblema tipoProblema) {
+        if (emailData.hasEthicalIssue && emailData.tipoProblema == tipoProblema) {
+            Debug.Log("Esse e-mail realmente tem problema ético " + tipoProblema + "!!");
             bool isCorrect = emailData.hasEthicalIssue;
             StartCoroutine(displayEmail.FlashColor(isCorrect));
-        } else if (emailData.hasEthicalIssue && emailData.tipoProblema != TipoProblema.Falibilidade) {
-            Debug.Log("Esse e-mail realmente tem problema ético mas não é Falibilidade");
+            scoreManager.AddScore(30);
+        } else if (emailData.hasEthicalIssue && emailData.tipoProblema != tipoProblema) {
+            Debug.Log("Esse e-mail realmente tem problema ético mas não é " + tipoProblema);
             bool isCorrect = !emailData.hasEthicalIssue;
-            StartCoroutine(displayEmail.FlashColor(isCorrect,"Yellow"));
+            StartCoroutine(displayEmail.FlashColor(isCorrect, "Yellow"));
+            scoreManager.AddScore(15);
         } else {
             Debug.Log("Esse e-mail não tem problema ético!");
             bool isCorrect = emailData.hasEthicalIssue;
             StartCoroutine(displayEmail.FlashColor(isCorrect));
+            scoreManager.AddScore(-5);
         }
-        
 
-        displayEmail.NextEmail();
+        emailManager.ShowNextEmail();
+    }
+
+    public void FalibilidadeCheck() {
+        CheckEthicalIssue(TipoProblema.Falibilidade);
     }
 
     public void OpacidadeCheck() {
-        if (emailData.hasEthicalIssue && emailData.tipoProblema == TipoProblema.Opacidade) {
-            Debug.Log("Esse e-mail realmente tem problema ético Opacidade!!");
-            bool isCorrect = emailData.hasEthicalIssue;
-            StartCoroutine(displayEmail.FlashColor(isCorrect));
-        } else if (emailData.hasEthicalIssue && emailData.tipoProblema != TipoProblema.Opacidade) {
-            Debug.Log("Esse e-mail realmente tem problema ético mas não é Opacidade");
-            bool isCorrect = !emailData.hasEthicalIssue;
-            StartCoroutine(displayEmail.FlashColor(isCorrect, "Yellow"));
-        } else {
-            Debug.Log("Esse e-mail não tem problema ético!");
-            bool isCorrect = emailData.hasEthicalIssue;
-            StartCoroutine(displayEmail.FlashColor(isCorrect));
-        }
-
-        displayEmail.NextEmail();
+        CheckEthicalIssue(TipoProblema.Opacidade);
     }
 
     public void ViesCheck() {
-        if (emailData.hasEthicalIssue && emailData.tipoProblema == TipoProblema.Vies) {
-            Debug.Log("Esse e-mail realmente tem problema ético Vies!!");
-            bool isCorrect = emailData.hasEthicalIssue;
-            StartCoroutine(displayEmail.FlashColor(isCorrect));
-        } else if (emailData.hasEthicalIssue && emailData.tipoProblema != TipoProblema.Vies) {
-            Debug.Log("Esse e-mail realmente tem problema ético mas não é Vies");
-            bool isCorrect = !emailData.hasEthicalIssue;
-            StartCoroutine(displayEmail.FlashColor(isCorrect, "Yellow"));
-        } else {
-            Debug.Log("Esse e-mail não tem problema ético!");
-            bool isCorrect = emailData.hasEthicalIssue;
-            StartCoroutine(displayEmail.FlashColor(isCorrect));
-        }
-
-        displayEmail.NextEmail();
+        CheckEthicalIssue(TipoProblema.Vies);
     }
 
     public void DiscriminacaoCheck() {
-        if (emailData.hasEthicalIssue && emailData.tipoProblema == TipoProblema.Discriminacao) {
-            Debug.Log("Esse e-mail realmente tem problema ético Discriminacao!!");
-            bool isCorrect = emailData.hasEthicalIssue;
-            StartCoroutine(displayEmail.FlashColor(isCorrect));
-        } else if (emailData.hasEthicalIssue && emailData.tipoProblema != TipoProblema.Discriminacao) {
-            Debug.Log("Esse e-mail realmente tem problema ético mas não é Discriminacao");
-            bool isCorrect = !emailData.hasEthicalIssue;
-            StartCoroutine(displayEmail.FlashColor(isCorrect, "Yellow"));
-        } else {
-            Debug.Log("Esse e-mail não tem problema ético!");
-            bool isCorrect = emailData.hasEthicalIssue;
-            StartCoroutine(displayEmail.FlashColor(isCorrect));
-        }
-
-        displayEmail.NextEmail();
+        CheckEthicalIssue(TipoProblema.Discriminacao);
     }
 
     public void AutonomiaCheck() {
-        if (emailData.hasEthicalIssue && emailData.tipoProblema == TipoProblema.Autonomia) {
-            Debug.Log("Esse e-mail realmente tem problema ético Autonomia!!");
-            bool isCorrect = emailData.hasEthicalIssue;
-            StartCoroutine(displayEmail.FlashColor(isCorrect));
-        } else if (emailData.hasEthicalIssue && emailData.tipoProblema != TipoProblema.Autonomia) {
-            Debug.Log("Esse e-mail realmente tem problema ético mas não é Autonomia");
-            bool isCorrect = !emailData.hasEthicalIssue;
-            StartCoroutine(displayEmail.FlashColor(isCorrect, "Yellow"));
-        } else {
-            Debug.Log("Esse e-mail não tem problema ético!");
-            bool isCorrect = emailData.hasEthicalIssue;
-            StartCoroutine(displayEmail.FlashColor(isCorrect));
-        }
-
-        displayEmail.NextEmail();
+        CheckEthicalIssue(TipoProblema.Autonomia);
     }
 
     public void PrivacidadeCheck() {
-        if (emailData.hasEthicalIssue && emailData.tipoProblema == TipoProblema.Privacidade) {
-            Debug.Log("Esse e-mail realmente tem problema ético Privacidade!!");
-            bool isCorrect = emailData.hasEthicalIssue;
-            StartCoroutine(displayEmail.FlashColor(isCorrect));
-        } else if (emailData.hasEthicalIssue && emailData.tipoProblema != TipoProblema.Privacidade) {
-            Debug.Log("Esse e-mail realmente tem problema ético mas não é Privacidade");
-            bool isCorrect = !emailData.hasEthicalIssue;
-            StartCoroutine(displayEmail.FlashColor(isCorrect, "Yellow"));
-        } else {
-            Debug.Log("Esse e-mail não tem problema ético!");
-            bool isCorrect = emailData.hasEthicalIssue;
-            StartCoroutine(displayEmail.FlashColor(isCorrect));
-        }
-
-        displayEmail.NextEmail();
+        CheckEthicalIssue(TipoProblema.Privacidade);
     }
 
     public void ResponsabilidadeCheck() {
-        if (emailData.hasEthicalIssue && emailData.tipoProblema == TipoProblema.Responsabilidade) {
-            Debug.Log("Esse e-mail realmente tem problema ético Responsabilidade!!");
-            bool isCorrect = emailData.hasEthicalIssue;
-            StartCoroutine(displayEmail.FlashColor(isCorrect));
-        } else if (emailData.hasEthicalIssue && emailData.tipoProblema != TipoProblema.Responsabilidade) {
-            Debug.Log("Esse e-mail realmente tem problema ético mas não é Responsabilidade");
-            bool isCorrect = !emailData.hasEthicalIssue;
-            StartCoroutine(displayEmail.FlashColor(isCorrect, "Yellow"));
-        } else {
-            Debug.Log("Esse e-mail não tem problema ético!");
-            bool isCorrect = emailData.hasEthicalIssue;
-            StartCoroutine(displayEmail.FlashColor(isCorrect));
-        }
-
-        displayEmail.NextEmail();
+        CheckEthicalIssue(TipoProblema.Responsabilidade);
     }
 }

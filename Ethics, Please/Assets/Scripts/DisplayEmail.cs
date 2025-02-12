@@ -1,125 +1,84 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class DisplayEmail : MonoBehaviour {
-    public ProposalDatabase proposalDatabase;
-    private List<int> indexList = new List<int>();
-    private int currentEmailIndex = -1;
+    private EmailManager emailManager;
+    private ScoreManager scoreManager;
 
     public TMP_Text companyNameText;
     public TMP_Text projectTitleText;
     public TMP_Text projectDescriptionText;
 
-    private Image background; // Referência para o fundo do e-mail
-    private Color defaultColor; // Para armazenar a cor original
+    private Image background;
+    private Color defaultColor;
 
-
+    private int currentEmailIndex = -1;
     public ProposalData currentProposal;
+
     void Awake() {
-        background = GetComponent<Image>(); // Pegamos a imagem do fundo
-        defaultColor = background.color; // Salvamos a cor original
+        emailManager = FindObjectOfType<EmailManager>();
+
+        background = GetComponent<Image>();
+        defaultColor = background.color;
     }
 
-    // Start is called before the first frame update
-    void Start() {
-        for (int i = 0; i < proposalDatabase.proposals.Count; i++) {
-            indexList.Add(i);
-        }
-        ShuffleEmailIndices();
-
-        NextEmail();
+    void Start() {        
+        scoreManager = FindObjectOfType<ScoreManager>();
     }
 
-    void DisplayEmails(int index) {
+    public void DisplayEmailByIndex(int index) {
+        ProposalDatabase proposalDatabase = emailManager.proposalDatabase;
         if (index >= 0 && index < proposalDatabase.proposals.Count) {
+            this.gameObject.SetActive(true);
             ProposalData proposal = proposalDatabase.proposals[index];
+
             companyNameText.text = proposal.companyName;
             projectTitleText.text = proposal.projectTitle;
             projectDescriptionText.text = proposal.projectDescription.Replace("\\n", "\n");
-            projectDescriptionText.text = proposal.projectDescription;
+
             currentProposal = proposal;
+            currentEmailIndex = index;
         }
     }
 
-
     public void AcceptEmail() {
-        ProposalData proposalData = proposalDatabase.proposals[currentEmailIndex];
-        if (proposalData.hasEthicalIssue) {
+        if (currentProposal == null) return;
+
+        if (currentProposal.hasEthicalIssue) {
             Debug.Log("Você aceitou um e-mail problemático! Isso terá consequências...");
-            bool isCorrect = !proposalData.hasEthicalIssue;
-            StartCoroutine(FlashColor(isCorrect));
-            // Adicione penalizações aqui (exemplo: diminuir reputação)
+            StartCoroutine(FlashColor(false));
+            scoreManager.AddScore(currentProposal.nivelProblema == NivelProblema.Leve ? -15 : -30);
         } else {
             Debug.Log("Bom trabalho! Você aceitou um e-mail ético.");
-            bool isCorrect = !proposalData.hasEthicalIssue;
-            StartCoroutine(FlashColor(isCorrect));
-            // Adicione recompensas aqui (exemplo: ganhar pontos de integridade)
+            StartCoroutine(FlashColor(true));
+            scoreManager.AddScore(20);
         }
 
-        NextEmail();
+        StartCoroutine(CloseAndRequestNext());
     }
 
     public void RejectEmail() {
-        ProposalData proposalData = proposalDatabase.proposals[currentEmailIndex];
-        if (proposalData.hasEthicalIssue) {
+        if (currentProposal == null) return;
+
+        if (currentProposal.hasEthicalIssue) {
             Debug.Log("Você corretamente rejeitou um e-mail problemático!");
-            bool isCorrect = proposalData.hasEthicalIssue;
-            StartCoroutine(FlashColor(isCorrect));
-            // Recompensa por detectar problemas éticos
+            StartCoroutine(FlashColor(true));
+            scoreManager.AddScore(10);
         } else {
             Debug.Log("Você rejeitou um e-mail legítimo...");
-            bool isCorrect = proposalData.hasEthicalIssue;
-            StartCoroutine(FlashColor(isCorrect));
-            // Penalização por rejeitar propostas boas
+            StartCoroutine(FlashColor(false));
+            scoreManager.AddScore(-10);
         }
 
-        NextEmail();
+        StartCoroutine(CloseAndRequestNext());
     }
 
-    void ShuffleEmailIndices() {
-        for (int i = 0; i < indexList.Count; i++) {
-            int tmp = indexList[i];
-            int r = Random.Range(i, indexList.Count);
-            indexList[i] = indexList[r];
-            indexList[r] = tmp;
-        }
-    }
-
-    public void NextEmail() {
-        StartCoroutine(WaitForNextEmail(1.5f));
-    }
-
-    IEnumerator WaitForNextEmail(float time) {
-
-        yield return new WaitForSeconds(time); // Espera dois segundos
-
-        if (indexList.Count > 0) {
-            // Select a random index from the available proposals
-            int randomIndex = Random.Range(0, indexList.Count);
-            currentEmailIndex = indexList[randomIndex];
-
-            // Display the selected proposal
-            DisplayEmails(currentEmailIndex);
-
-            // Remove the selected index to avoid repetition
-            indexList.RemoveAt(randomIndex);
-        } else {
-            // If all proposals have been shown, restart the process
-            Debug.Log("All proposals have been displayed!");
-            indexList = new List<int>();
-            for (int i = 0; i < proposalDatabase.proposals.Count; i++) {
-                indexList.Add(i);
-            }
-
-            // Shuffle the list of proposals again
-            ShuffleEmailIndices();
-
-            // Show the next proposal
-            NextEmail();
-        }
+    private IEnumerator CloseAndRequestNext() {
+        yield return new WaitForSeconds(1.5f);
+        this.gameObject.SetActive(false);
+        emailManager.RequestNextEmail();
     }
 
     public IEnumerator FlashColor(bool isCorrect, string optional = "Default") {
