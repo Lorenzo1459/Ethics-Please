@@ -41,17 +41,17 @@ public class PillarCheck : MonoBehaviour {
         if (emailData.hasEthicalIssue && emailData.tipoProblema == tipoProblema) {
             Debug.Log("Esse e-mail realmente tem problema ético " + tipoProblema + "!!");
             bool isCorrect = emailData.hasEthicalIssue;
-            StartCoroutine(displayEmail.FlashColor(isCorrect));
+            StartCoroutine(displayEmail.FlashColor(Color.green));
             scoreManager.AddScore(30);
         } else if (emailData.hasEthicalIssue && emailData.tipoProblema != tipoProblema) {
             Debug.Log("Esse e-mail realmente tem problema ético mas não é " + tipoProblema);
             bool isCorrect = !emailData.hasEthicalIssue;
-            StartCoroutine(displayEmail.FlashColor(isCorrect, "Yellow"));
+            StartCoroutine(displayEmail.FlashColor(Color.yellow));
             scoreManager.AddScore(15);
         } else {
             Debug.Log("Esse e-mail não tem problema ético!");
             bool isCorrect = emailData.hasEthicalIssue;
-            StartCoroutine(displayEmail.FlashColor(isCorrect));
+            StartCoroutine(displayEmail.FlashColor(Color.red));
             scoreManager.AddScore(-5);
         }
 

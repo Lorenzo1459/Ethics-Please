@@ -9,7 +9,9 @@ public class DisplayEmail : MonoBehaviour {
 
     public TMP_Text companyNameText;
     public TMP_Text projectTitleText;
-    public TMP_Text projectDescriptionText;
+    public TMP_InputField projectDescriptionText;
+    public ScrollRect scrollRect;
+    public float scrollSpeed = 0.1f;
 
     private Image background;
     private Color defaultColor;
@@ -19,13 +21,20 @@ public class DisplayEmail : MonoBehaviour {
 
     void Awake() {
         emailManager = FindObjectOfType<EmailManager>();
-
-        background = GetComponent<Image>();
-        defaultColor = background.color;
     }
 
-    void Start() {        
+    void Start() {
         scoreManager = FindObjectOfType<ScoreManager>();
+        this.gameObject.SetActive(false);
+    }
+
+    private void Update() {
+        float scroll = Input.GetAxis("Mouse ScrollWheel");
+        if (scroll != 0) {
+            // Move o ScrollRect para cima ou para baixo
+            scrollRect.verticalNormalizedPosition += scroll * scrollSpeed;
+            scrollRect.verticalNormalizedPosition = Mathf.Clamp01(scrollRect.verticalNormalizedPosition);
+        }
     }
 
     public void DisplayEmailByIndex(int index) {
@@ -48,15 +57,15 @@ public class DisplayEmail : MonoBehaviour {
 
         if (currentProposal.hasEthicalIssue) {
             Debug.Log("Você aceitou um e-mail problemático! Isso terá consequências...");
-            StartCoroutine(FlashColor(false));
+            StartCoroutine(FlashColor(Color.red));
             scoreManager.AddScore(currentProposal.nivelProblema == NivelProblema.Leve ? -15 : -30);
         } else {
             Debug.Log("Bom trabalho! Você aceitou um e-mail ético.");
-            StartCoroutine(FlashColor(true));
+            StartCoroutine(FlashColor(Color.red));
             scoreManager.AddScore(20);
         }
 
-        StartCoroutine(CloseAndRequestNext());
+        StartCoroutine(CloseEmail());
     }
 
     public void RejectEmail() {
@@ -64,32 +73,25 @@ public class DisplayEmail : MonoBehaviour {
 
         if (currentProposal.hasEthicalIssue) {
             Debug.Log("Você corretamente rejeitou um e-mail problemático!");
-            StartCoroutine(FlashColor(true));
+            StartCoroutine(FlashColor(Color.green));
             scoreManager.AddScore(10);
         } else {
             Debug.Log("Você rejeitou um e-mail legítimo...");
-            StartCoroutine(FlashColor(false));
+            StartCoroutine(FlashColor(Color.green));
             scoreManager.AddScore(-10);
         }
 
-        StartCoroutine(CloseAndRequestNext());
+        StartCoroutine(CloseEmail());
     }
 
-    private IEnumerator CloseAndRequestNext() {
+    private IEnumerator CloseEmail() {
         yield return new WaitForSeconds(1.5f);
         this.gameObject.SetActive(false);
-        emailManager.RequestNextEmail();
     }
 
-    public IEnumerator FlashColor(bool isCorrect, string optional = "Default") {
-        if (optional == "Default") {
-            background.color = isCorrect ? Color.green : Color.red;
-            yield return new WaitForSeconds(1.5f); // Espera 1.5s
-            background.color = defaultColor; // Retorna à cor original
-        } else if (optional == "Yellow") {
-            background.color = Color.yellow;
-            yield return new WaitForSeconds(1.5f); // Espera 1.5s
-            background.color = defaultColor; // Retorna à cor original
-        }
+    public IEnumerator FlashColor(Color flashColor) {
+        background.color = flashColor;
+        yield return new WaitForSeconds(1.5f);
+        background.color = defaultColor;
     }
 }
