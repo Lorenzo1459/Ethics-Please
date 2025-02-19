@@ -24,3 +24,7 @@ MonoBehaviour:
   hasEthicalIssue: 1
   tipoProblema: 2
   nivelProblema: 3
+  trechoAntietico:
+  - "sugerindo senten\xE7as com base em padr\xF5es estat\xEDsticos"
+  - "Nosso modelo reduz a subjetividade humana e mant\xE9m a coer\xEAncia das decis\xF5es
+    judiciais"

@@ -23,5 +23,9 @@ MonoBehaviour:
     prontos para desenvolver essa solu\xE7\xE3o para revolucionar o mercado financeiro!\n\nAtenciosamente,\nEquipe
     FinTech Solutions"
   hasEthicalIssue: 1
-  tipoProblema: 0
+  tipoProblema: 1
   nivelProblema: 3
+  trechoAntietico:
+  - "prever com exatid\xE3o a confiabilidade de um cliente"
+  - "trabalha de forma aut\xF4noma e sigilosa, garantindo que a concorr\xEAncia n\xE3o
+    descubra nossa f\xF3rmula de sucesso"

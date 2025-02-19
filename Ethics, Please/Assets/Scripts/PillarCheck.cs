@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro; // Importação necessária para lidar com TMP_InputField
 
 public class PillarCheck : MonoBehaviour {
     public DisplayEmail displayEmail;
@@ -10,52 +11,99 @@ public class PillarCheck : MonoBehaviour {
     private ProposalData emailData;
     private ScoreManager scoreManager;
 
+    public TMP_InputField emailInputField; // Referência ao campo de texto onde o e-mail aparece
+    public float tolerance = 0.5f; // Ajuste para flexibilidade da seleção
+
     private void Start() {
         displayEmail = FindObjectOfType<DisplayEmail>();
         emailManager = FindObjectOfType<EmailManager>();
         scoreManager = FindObjectOfType<ScoreManager>();
     }
 
-    // Start is called before the first frame update    
-    void Update() {
+    public void CheckEthicalIssue(TipoProblema tipoProblema) {
         emailData = displayEmail.currentProposal;
-        if (Input.GetMouseButtonDown(0)) // Left-click
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit)) {
-                GameObject clickedObject = hit.collider.gameObject;
-                emailData = clickedObject.GetComponent<ProposalData>();
+        if (emailData == null) {
+            Debug.LogWarning("Nenhum e-mail carregado.");
+            return;
+        }
 
-                if (emailData != null) {
-                    Debug.Log("Component found: " + emailData);
-                } else {
-                    Debug.Log("Component not found.");
-                }
+        string selectedText = GetSelectedText();
+        if (string.IsNullOrEmpty(selectedText)) {
+            Debug.LogWarning("Nenhum texto selecionado!");
+            return;
+        }
+
+        bool isSelectionCorrect = false;
+
+        foreach (string problem in emailData.trechoAntietico) {
+            if (IsSimilar(selectedText.ToLower(), problem.ToLower())) {
+                isSelectionCorrect = true;
+                break;
             }
         }
-    }
 
-    public void CheckEthicalIssue(TipoProblema tipoProblema) {
-        if (emailData.hasEthicalIssue && emailData.tipoProblema == tipoProblema) {
-            Debug.Log("Esse e-mail realmente tem problema ético " + tipoProblema + "!!");
-            bool isCorrect = emailData.hasEthicalIssue;
-            StartCoroutine(displayEmail.FlashColor(Color.green));
-            scoreManager.AddScore(30);
-        } else if (emailData.hasEthicalIssue && emailData.tipoProblema != tipoProblema) {
-            Debug.Log("Esse e-mail realmente tem problema ético mas não é " + tipoProblema);
-            bool isCorrect = !emailData.hasEthicalIssue;
-            StartCoroutine(displayEmail.FlashColor(Color.yellow));
-            scoreManager.AddScore(15);
+        bool acertouTipoProblema = emailData.tipoProblema == tipoProblema;
+        int pontos = 0;
+        Color feedbackColor = Color.red;
+        string resultado = "Incorreto";
+
+        if (isSelectionCorrect && acertouTipoProblema) {
+            Debug.Log("Esse e-mail realmente tem problema ético " + tipoProblema + " e a seleção foi correta!");
+            pontos = 30;
+            feedbackColor = Color.green;
+            resultado = "Correto";
+        } else if (emailData.hasEthicalIssue) {
+            Debug.Log("Esse e-mail realmente tem problema ético, mas a seleção foi incorreta.");
+            pontos = 15;
+            feedbackColor = Color.yellow;
         } else {
             Debug.Log("Esse e-mail não tem problema ético!");
-            bool isCorrect = emailData.hasEthicalIssue;
-            StartCoroutine(displayEmail.FlashColor(Color.red));
-            scoreManager.AddScore(-5);
+            pontos = -5;
         }
 
-        emailManager.ShowNextEmail();
+        scoreManager.AddScore(pontos);
+        StartCoroutine(displayEmail.FlashColor(feedbackColor));
+
+        // **Registrar no histórico**
+        FindObjectOfType<EmailManager>().RegisterDecision(selectedText, tipoProblema, resultado);
+
+        StartCoroutine(displayEmail.CloseEmail());
+    }
+
+    private string GetSelectedText() {
+        if (emailInputField == null) return "";
+
+        int start = emailInputField.stringPosition;
+        int end = emailInputField.selectionStringAnchorPosition;
+
+        if (start > end) {
+            int temp = start;
+            start = end;
+            end = temp;
+        }
+
+        if (start == end) return ""; // Nada selecionado
+
+        return emailInputField.text.Substring(start, end - start);
+    }
+
+    private bool IsSimilar(string selected, string problem) {
+        if (problem.Contains(selected)) return true; // Se o trecho exato estiver dentro do problema, já conta.
+
+        int maxMatchingChars = 0;
+
+        for (int i = 0; i <= problem.Length - selected.Length; i++) {
+            int matchingChars = 0;
+            for (int j = 0; j < selected.Length; j++) {
+                if (problem[i + j] == selected[j]) matchingChars++;
+            }
+
+            maxMatchingChars = Mathf.Max(maxMatchingChars, matchingChars);
+        }
+
+        float similarity = (float)maxMatchingChars / selected.Length;
+        return similarity >= tolerance;
     }
 
     public void FalibilidadeCheck() {

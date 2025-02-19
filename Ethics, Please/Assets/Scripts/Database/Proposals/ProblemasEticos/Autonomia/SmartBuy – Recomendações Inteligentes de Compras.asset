@@ -23,3 +23,7 @@ MonoBehaviour:
   hasEthicalIssue: 1
   tipoProblema: 4
   nivelProblema: 1
+  trechoAntietico:
+  - ao exibir apenas os produtos mais relevantes para suas necessidade
+  - "Ele filtra produtos concorrentes para garantir que o cliente encontre rapidamente
+    as melhores op\xE7\xF5es sem distra\xE7\xF5es"

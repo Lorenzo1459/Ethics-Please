@@ -23,3 +23,6 @@ MonoBehaviour:
   hasEthicalIssue: 1
   tipoProblema: 6
   nivelProblema: 3
+  trechoAntietico:
+  - "Eliminamos responsabilidades sobre falhas, pois o ve\xEDculo toma decis\xF5es
+    pr\xF3prias, reduzindo riscos legais para a empresa"

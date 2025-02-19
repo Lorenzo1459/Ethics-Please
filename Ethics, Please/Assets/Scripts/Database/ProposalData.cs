@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum TipoProblema {
@@ -28,4 +29,5 @@ public class ProposalData : ScriptableObject {
     public bool hasEthicalIssue; // True if the proposal has an ethical issue
     public TipoProblema tipoProblema;
     public NivelProblema nivelProblema;
+    public List<string> trechoAntietico;
 }

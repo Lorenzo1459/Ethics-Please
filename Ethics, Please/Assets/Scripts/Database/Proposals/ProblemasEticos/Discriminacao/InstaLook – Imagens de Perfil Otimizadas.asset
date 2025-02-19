@@ -23,3 +23,6 @@ MonoBehaviour:
   hasEthicalIssue: 1
   tipoProblema: 3
   nivelProblema: 1
+  trechoAntietico:
+  - "Nossa IA analisa a qualidade da imagem e sugere altera\xE7\xF5es para garantir
+    um feed mais harm\xF4nico e atrativo"

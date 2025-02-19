@@ -54,6 +54,37 @@ public class DisplayEmail : MonoBehaviour {
         }
     }
 
+    public void DisplayEmailData(ProposalData proposal) {
+        if (proposal == null) {
+            Debug.LogWarning("Tentativa de exibir um e-mail nulo!");
+            return;
+        }
+
+        this.gameObject.SetActive(true);
+
+        companyNameText.text = proposal.companyName;
+        projectTitleText.text = proposal.projectTitle;
+        projectDescriptionText.text = proposal.projectDescription.Replace("\\n", "\n");
+
+        currentProposal = proposal;
+    }
+
+    public void DisplayHistoryEmail(EmailHistoryEntry historyEntry) {
+        this.gameObject.SetActive(true);
+
+        companyNameText.text = "Histórico";
+        projectTitleText.text = "E-mail analisado";
+        projectDescriptionText.text =
+            $"{historyEntry.emailText}\n\n" +
+            $"📝 *Trecho Selecionado:* {historyEntry.selectedText}\n" +
+            $"✔ *Problema Correto:* {historyEntry.correctProblem}\n" +
+            $"❌ *Problema Escolhido:* {historyEntry.chosenProblem}\n" +
+            $"📌 *Resultado:* {historyEntry.result}";
+
+        currentProposal = null; // Não é um e-mail novo, então não precisa de ação
+    }
+
+
     public void AcceptEmail() {
         if (currentProposal == null) return;
 
@@ -86,8 +117,8 @@ public class DisplayEmail : MonoBehaviour {
         StartCoroutine(CloseEmail());
     }
 
-    private IEnumerator CloseEmail() {
-        yield return new WaitForSeconds(1.5f);
+    public IEnumerator CloseEmail() {
+        yield return new WaitForSeconds(1.5f);        
         this.gameObject.SetActive(false);
     }
 

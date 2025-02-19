@@ -24,3 +24,8 @@ MonoBehaviour:
   hasEthicalIssue: 1
   tipoProblema: 2
   nivelProblema: 1
+  trechoAntietico:
+  - "Nossa IA seleciona conte\xFAdos que geram maior intera\xE7\xE3o, mantendo os
+    leitores sempre envolvidos"
+  - "Ao priorizar not\xEDcias mais impactantes, garantimos que o p\xFAblico permane\xE7a
+    ativo na plataforma por mais tempo, impulsionando receita e crescimento."

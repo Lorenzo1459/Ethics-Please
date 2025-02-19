@@ -26,3 +26,6 @@ MonoBehaviour:
   hasEthicalIssue: 1
   tipoProblema: 0
   nivelProblema: 1
+  trechoAntietico:
+  - "o AutoCorretor IA n\xE3o requer ajustes manuais, evitando erros humanos ao desativar
+    a funcionalidade"

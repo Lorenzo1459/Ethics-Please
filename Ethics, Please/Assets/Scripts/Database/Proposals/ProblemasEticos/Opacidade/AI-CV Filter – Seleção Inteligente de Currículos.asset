@@ -23,5 +23,10 @@ MonoBehaviour:
     ferramenta, sua empresa economizar\xE1 tempo e contratar\xE1 os melhores talentos
     de forma mais eficiente.\n\nAtenciosamente,\nEquipe TalentAI"
   hasEthicalIssue: 1
-  tipoProblema: 0
+  tipoProblema: 1
   nivelProblema: 1
+  trechoAntietico:
+  - "Nossa IA analisa curr\xEDculos e filtra os melhores candidatos com base em um
+    modelo de aprendizado avan\xE7ado."
+  - "Para evitar distra\xE7\xF5es e reclama\xE7\xF5es, o algoritmo opera sem transpar\xEAncia
+    total"

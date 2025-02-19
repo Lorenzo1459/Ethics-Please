@@ -23,3 +23,8 @@ MonoBehaviour:
   hasEthicalIssue: 1
   tipoProblema: 5
   nivelProblema: 1
+  trechoAntietico:
+  - "podemos oferecer planos de treino e nutri\xE7\xE3o ideais, e ainda monetizar
+    insights com parceiros estrat\xE9gicos, garantindo um modelo de neg\xF3cios sustent\xE1vel
+    e inovador."
+  - "aprende com os h\xE1bitos dos usu\xE1rios para criar recomenda\xE7\xF5es personalizadas"
