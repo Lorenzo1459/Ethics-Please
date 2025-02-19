@@ -21,6 +21,8 @@ public class DisplayEmail : MonoBehaviour {
 
     void Awake() {
         emailManager = FindObjectOfType<EmailManager>();
+        background = GetComponent<Image>();
+        defaultColor = background.color;
     }
 
     void Start() {
@@ -61,7 +63,7 @@ public class DisplayEmail : MonoBehaviour {
             scoreManager.AddScore(currentProposal.nivelProblema == NivelProblema.Leve ? -15 : -30);
         } else {
             Debug.Log("Bom trabalho! Você aceitou um e-mail ético.");
-            StartCoroutine(FlashColor(Color.red));
+            StartCoroutine(FlashColor(Color.green));
             scoreManager.AddScore(20);
         }
 
@@ -77,7 +79,7 @@ public class DisplayEmail : MonoBehaviour {
             scoreManager.AddScore(10);
         } else {
             Debug.Log("Você rejeitou um e-mail legítimo...");
-            StartCoroutine(FlashColor(Color.green));
+            StartCoroutine(FlashColor(Color.red));
             scoreManager.AddScore(-10);
         }
 
