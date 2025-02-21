@@ -2,19 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class EmailManager : MonoBehaviour {
     public ProposalDatabase proposalDatabase;
-    public TMP_Text emailCountText; // Referência ao número de e-mails no botão
+    public TMP_Text emailCountText; // Contador de e-mails no botão
+    public GameObject historyPanel; // Painel do histórico
+    public Transform historyContent; // Parent dos botões do histórico
+    public Button historyButtonPrefab; // Prefab do botão de histórico
 
     private Queue<int> emailQueue = new Queue<int>();
     private List<int> indexList = new List<int>();
     private List<EmailHistoryEntry> emailHistory = new List<EmailHistoryEntry>(); // Histórico de e-mails
 
-    private int emailCount = 0; // Número de e-mails disponíveis
-    private float emailCooldown = 10f; // Tempo base entre e-mails
-    private int historyIndex = -1; // Índice do histórico
-
+    private int emailCount = 0;
+    private float emailCooldown = 10f;
     private DisplayEmail displayEmail;
     private ProposalData currentEmailData;
 
@@ -30,6 +32,13 @@ public class EmailManager : MonoBehaviour {
 
         StartCoroutine(DelayedFirstEmail(3f));
         StartCoroutine(GenerateEmailsOverTime());
+
+        if (historyPanel != null) {
+            //historyPanel.SetActive(false); // Garante que o painel começa fechado
+        }
+        if (historyPanel == null || historyContent == null) {
+            Debug.LogError("Referência de historyPanel ou historyContent está nula!");
+        }
     }
 
     private void ShuffleEmailIndices() {
@@ -78,85 +87,135 @@ public class EmailManager : MonoBehaviour {
 
     public void ShowNextEmail() {
         if (currentEmailData != null) {
-            // Salva o e-mail atual no histórico antes de mostrar o novo
+            // Salva o e-mail no histórico antes de mostrar o novo
             emailHistory.Add(new EmailHistoryEntry(
+                currentEmailData.companyName,
+                currentEmailData.projectTitle,
                 currentEmailData.projectDescription,
                 "", // Ainda sem seleção
                 currentEmailData.tipoProblema,
-                TipoProblema.Nenhum, // Ainda sem resposta
+                TipoProblema.Nenhum, // Sem resposta ainda
                 "Pendente"
             ));
+            UpdateHistoryUI();
         }
 
         if (emailCount > 0 && emailQueue.Count > 0) {
             int nextEmailIndex = emailQueue.Dequeue();
-            currentEmailData = proposalDatabase.proposals[nextEmailIndex]; // Atualiza o e-mail atual
+            currentEmailData = proposalDatabase.proposals[nextEmailIndex];
             displayEmail.DisplayEmailByIndex(nextEmailIndex);
             emailCount--;
             UpdateEmailCountUI();
-            historyIndex = emailHistory.Count - 1; // Atualiza índice do histórico
         } else {
             Debug.Log("Nenhum e-mail disponível no momento.");
         }
     }
 
-    public void ShowPreviousHistoryEmail() {
-        if (historyIndex > 0) {
-            historyIndex--;
-            displayEmail.DisplayEmailData(emailHistory[historyIndex].proposal);
-        }
-    }
-
-    public void ShowNextHistoryEmail() {
-        if (historyIndex < emailHistory.Count - 1) {
-            historyIndex++;
-            displayEmail.DisplayEmailData(emailHistory[historyIndex].proposal);
-        }
-    }
-
-    // Função chamada quando o jogador toma uma decisão
     public void RegisterDecision(string selectedText, TipoProblema chosenProblem, string result) {
-        if (currentEmailData == null) return;
+        if (currentEmailData == null || emailHistory.Count == 0) return;
 
+        // Atualiza a última entrada do histórico
         emailHistory[emailHistory.Count - 1] = new EmailHistoryEntry(
+            currentEmailData.companyName,
+            currentEmailData.projectTitle,
             currentEmailData.projectDescription,
             selectedText,
             currentEmailData.tipoProblema,
             chosenProblem,
             result
         );
+
+        UpdateHistoryUI();
     }
 
-    // Exibir histórico no console (para debug)
-    public void ShowHistory() {
-        Debug.Log("=== HISTÓRICO DE E-MAILS ===");
-        foreach (var entry in emailHistory) {
-            Debug.Log($"E-mail: {entry.emailText}\n" +
-                      $"Trecho Selecionado: {entry.selectedText}\n" +
-                      $"Problema Correto: {entry.correctProblem}\n" +
-                      $"Problema Escolhido: {entry.chosenProblem}\n" +
-                      $"Resultado: {entry.result}\n");
+    public void ToggleHistoryPanel() {
+        if (historyPanel != null) {
+            historyPanel.SetActive(!historyPanel.activeSelf);
         }
     }
+
+    private void UpdateHistoryUI() {
+        if (historyContent == null) {
+            Debug.LogWarning("historyContent está nulo! Certifique-se de que ele foi atribuído no Inspector.");
+            return;
+        }
+
+        // Desativar os botões antigos sem destruí-los
+        foreach (Transform child in historyContent) {
+            child.gameObject.SetActive(false);
+        }
+
+        // Aguarde um frame antes de recriar os botões (evita erros)
+        StartCoroutine(GenerateHistoryButtons());
+    }
+
+    private IEnumerator GenerateHistoryButtons() {
+        yield return null; // Aguarda um frame para evitar conflitos
+
+        if (historyContent == null) yield break; // Sai da função se historyContent foi destruído
+
+        for (int i = 0; i < emailHistory.Count; i++) {
+            int emailIndex = i;
+            Button newButton = Instantiate(historyButtonPrefab, historyContent);
+            TMP_Text buttonText = newButton.GetComponentInChildren<TMP_Text>();
+
+            if (buttonText != null) {
+                buttonText.text = emailHistory[emailIndex].emailTitleText;
+            } else {
+                Debug.LogError("Botão de histórico não tem TMP_Text!");
+            }
+
+            newButton.onClick.AddListener(() => ShowHistoryEmail(emailIndex));
+        }
+    }
+
+
+    private IEnumerator RecreateHistoryButtons() {
+        yield return null; // Aguarda um frame para evitar erros de referência
+
+        for (int i = 0; i < emailHistory.Count; i++) {
+            int emailIndex = i;
+            Button newButton = Instantiate(historyButtonPrefab, historyContent);
+            TMP_Text buttonText = newButton.GetComponentInChildren<TMP_Text>();
+
+            if (buttonText != null) {
+                buttonText.text = emailHistory[emailIndex].emailTitleText;
+            } else {
+                Debug.LogError("Botão de histórico não tem TMP_Text!");
+            }
+
+            newButton.onClick.AddListener(() => ShowHistoryEmail(emailIndex));
+        }
+    }
+
+    private void ShowHistoryEmail(int index) {
+        if (index >= 0 && index < emailHistory.Count) {
+            displayEmail.DisplayEmailHistory(emailHistory[index]);
+        }
+    }
+
     public List<EmailHistoryEntry> GetEmailHistory() {
         return emailHistory;
     }
 }
 
-// Classe que representa um e-mail armazenado no histórico
+// Classe que representa um e-mail no histórico
 public class EmailHistoryEntry {
     public string emailText;
     public string selectedText;
     public TipoProblema correctProblem;
     public TipoProblema chosenProblem;
     public string result;
-    public ProposalData proposal; // Para recuperar o e-mail completo
+    public string companyNameText; // New field
+    public string emailTitleText; // New field
 
-    public EmailHistoryEntry(string emailText, string selectedText, TipoProblema correctProblem, TipoProblema chosenProblem, string result) {
+    public EmailHistoryEntry(string companyNameText, string emailTitleText, string emailText, string selectedText, TipoProblema correctProblem, TipoProblema chosenProblem, string result) {
         this.emailText = emailText;
         this.selectedText = selectedText;
         this.correctProblem = correctProblem;
         this.chosenProblem = chosenProblem;
         this.result = result;
+        this.companyNameText = companyNameText;
+        this.emailTitleText = emailTitleText;
     }
 }

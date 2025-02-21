@@ -69,19 +69,14 @@ public class DisplayEmail : MonoBehaviour {
         currentProposal = proposal;
     }
 
-    public void DisplayHistoryEmail(EmailHistoryEntry historyEntry) {
+    public void DisplayEmailHistory(EmailHistoryEntry entry) {
         this.gameObject.SetActive(true);
-
-        companyNameText.text = "Histórico";
-        projectTitleText.text = "E-mail analisado";
-        projectDescriptionText.text =
-            $"{historyEntry.emailText}\n\n" +
-            $"📝 *Trecho Selecionado:* {historyEntry.selectedText}\n" +
-            $"✔ *Problema Correto:* {historyEntry.correctProblem}\n" +
-            $"❌ *Problema Escolhido:* {historyEntry.chosenProblem}\n" +
-            $"📌 *Resultado:* {historyEntry.result}";
-
-        currentProposal = null; // Não é um e-mail novo, então não precisa de ação
+        companyNameText.text = entry.companyNameText; // Ou algum indicador visual
+        projectTitleText.text = entry.emailTitleText;
+        projectDescriptionText.text = entry.emailText + entry.selectedText +
+            "\n\n✅ Problema correto: " + entry.correctProblem.ToString() +
+            "\n❌ Escolhido: " + entry.chosenProblem.ToString() +
+            "\n\nResultado: " + entry.result;
     }
 
 
