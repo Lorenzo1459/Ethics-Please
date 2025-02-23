@@ -73,10 +73,12 @@ public class DisplayEmail : MonoBehaviour {
         this.gameObject.SetActive(true);
         companyNameText.text = entry.companyNameText; // Ou algum indicador visual
         projectTitleText.text = entry.emailTitleText;
-        projectDescriptionText.text = entry.emailText + entry.selectedText +
+        string highlightedText = emailManager.HighlightUnethicalParts(entry.emailText, entry.unethicalParts);
+        projectDescriptionText.text = highlightedText + entry.selectedText +
             "\n\n✅ Problema correto: " + entry.correctProblem.ToString() +
             "\n❌ Escolhido: " + entry.chosenProblem.ToString() +
-            "\n\nResultado: " + entry.result;
+            "\nTrecho destacado: " + entry.selectedText + "\n\n" +
+            "\n\nResultado: " + entry.result + "\n\n";
     }
 
 
@@ -85,14 +87,13 @@ public class DisplayEmail : MonoBehaviour {
 
         if (currentProposal.hasEthicalIssue) {
             Debug.Log("Você aceitou um e-mail problemático! Isso terá consequências...");
-            StartCoroutine(FlashColor(Color.red));
+            StartCoroutine(FlashColor(Color.red));            
             scoreManager.AddScore(currentProposal.nivelProblema == NivelProblema.Leve ? -15 : -30);
         } else {
             Debug.Log("Bom trabalho! Você aceitou um e-mail ético.");
-            StartCoroutine(FlashColor(Color.green));
+            StartCoroutine(FlashColor(Color.green));            
             scoreManager.AddScore(20);
-        }
-
+        }        
         StartCoroutine(CloseEmail());
     }
 
@@ -101,19 +102,19 @@ public class DisplayEmail : MonoBehaviour {
 
         if (currentProposal.hasEthicalIssue) {
             Debug.Log("Você corretamente rejeitou um e-mail problemático!");
-            StartCoroutine(FlashColor(Color.green));
+            StartCoroutine(FlashColor(Color.green));            
             scoreManager.AddScore(10);
         } else {
             Debug.Log("Você rejeitou um e-mail legítimo...");
-            StartCoroutine(FlashColor(Color.red));
+            StartCoroutine(FlashColor(Color.red));            
             scoreManager.AddScore(-10);
-        }
-
+        }        
         StartCoroutine(CloseEmail());
     }
 
     public IEnumerator CloseEmail() {
-        yield return new WaitForSeconds(1.5f);        
+        yield return new WaitForSeconds(1.5f);
+        emailManager.SaveAndUpdateHistory();
         this.gameObject.SetActive(false);
     }
 

@@ -66,5 +66,5 @@ public class HistoryUI : MonoBehaviour {
             currentHistoryIndex++;
             ShowEmailByIndex(currentHistoryIndex);
         }
-    }
+    }    
 }

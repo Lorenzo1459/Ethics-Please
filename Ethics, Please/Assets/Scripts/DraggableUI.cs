@@ -20,6 +20,7 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         // Torna a imagem semi-transparente enquanto arrasta
         canvasGroup.alpha = 0.6f;
         canvasGroup.blocksRaycasts = false; // Permite que outros elementos recebam eventos enquanto arrasta
+        transform.SetAsLastSibling();
     }
 
     public void OnDrag(PointerEventData eventData) {

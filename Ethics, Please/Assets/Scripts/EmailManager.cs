@@ -13,14 +13,14 @@ public class EmailManager : MonoBehaviour {
 
     private Queue<int> emailQueue = new Queue<int>();
     private List<int> indexList = new List<int>();
-    private List<EmailHistoryEntry> emailHistory = new List<EmailHistoryEntry>(); // Histórico de e-mails
+    private List<EmailHistoryEntry> emailHistory = new List<EmailHistoryEntry>(); // Histórico de e-mails   
 
     private int emailCount = 0;
     private float emailCooldown = 10f;
     private DisplayEmail displayEmail;
     private ProposalData currentEmailData;
 
-    void Start() {
+    private void Start() {
         displayEmail = FindObjectOfType<DisplayEmail>();
 
         for (int i = 0; i < proposalDatabase.proposals.Count; i++) {
@@ -33,9 +33,6 @@ public class EmailManager : MonoBehaviour {
         StartCoroutine(DelayedFirstEmail(3f));
         StartCoroutine(GenerateEmailsOverTime());
 
-        if (historyPanel != null) {
-            //historyPanel.SetActive(false); // Garante que o painel começa fechado
-        }
         if (historyPanel == null || historyContent == null) {
             Debug.LogError("Referência de historyPanel ou historyContent está nula!");
         }
@@ -79,27 +76,13 @@ public class EmailManager : MonoBehaviour {
         }
     }
 
-    IEnumerator DelayedFirstEmail(float delay) {
+    private IEnumerator DelayedFirstEmail(float delay) {
         yield return new WaitForSeconds(delay);
         emailCount++;
         UpdateEmailCountUI();
     }
 
     public void ShowNextEmail() {
-        if (currentEmailData != null) {
-            // Salva o e-mail no histórico antes de mostrar o novo
-            emailHistory.Add(new EmailHistoryEntry(
-                currentEmailData.companyName,
-                currentEmailData.projectTitle,
-                currentEmailData.projectDescription,
-                "", // Ainda sem seleção
-                currentEmailData.tipoProblema,
-                TipoProblema.Nenhum, // Sem resposta ainda
-                "Pendente"
-            ));
-            UpdateHistoryUI();
-        }
-
         if (emailCount > 0 && emailQueue.Count > 0) {
             int nextEmailIndex = emailQueue.Dequeue();
             currentEmailData = proposalDatabase.proposals[nextEmailIndex];
@@ -114,6 +97,8 @@ public class EmailManager : MonoBehaviour {
     public void RegisterDecision(string selectedText, TipoProblema chosenProblem, string result) {
         if (currentEmailData == null || emailHistory.Count == 0) return;
 
+        List<string> unethicalParts = new List<string>(currentEmailData.trechoAntietico);
+
         // Atualiza a última entrada do histórico
         emailHistory[emailHistory.Count - 1] = new EmailHistoryEntry(
             currentEmailData.companyName,
@@ -122,10 +107,18 @@ public class EmailManager : MonoBehaviour {
             selectedText,
             currentEmailData.tipoProblema,
             chosenProblem,
-            result
+            result,
+            unethicalParts
         );
 
         UpdateHistoryUI();
+    }
+
+    public string HighlightUnethicalParts(string text, List<string> unethicalParts) {
+        foreach (string part in unethicalParts) {
+            text = text.Replace(part, $"<color=red>{part}</color>");
+        }
+        return text;
     }
 
     public void ToggleHistoryPanel() {
@@ -134,7 +127,7 @@ public class EmailManager : MonoBehaviour {
         }
     }
 
-    private void UpdateHistoryUI() {
+    public void UpdateHistoryUI() {
         if (historyContent == null) {
             Debug.LogWarning("historyContent está nulo! Certifique-se de que ele foi atribuído no Inspector.");
             return;
@@ -150,8 +143,6 @@ public class EmailManager : MonoBehaviour {
     }
 
     private IEnumerator GenerateHistoryButtons() {
-        yield return null; // Aguarda um frame para evitar conflitos
-
         if (historyContent == null) yield break; // Sai da função se historyContent foi destruído
 
         for (int i = 0; i < emailHistory.Count; i++) {
@@ -161,27 +152,6 @@ public class EmailManager : MonoBehaviour {
 
             if (buttonText != null) {
                 buttonText.text = emailHistory[emailIndex].emailTitleText;
-            } else {
-                Debug.LogError("Botão de histórico não tem TMP_Text!");
-            }
-
-            newButton.onClick.AddListener(() => ShowHistoryEmail(emailIndex));
-        }
-    }
-
-
-    private IEnumerator RecreateHistoryButtons() {
-        yield return null; // Aguarda um frame para evitar erros de referência
-
-        for (int i = 0; i < emailHistory.Count; i++) {
-            int emailIndex = i;
-            Button newButton = Instantiate(historyButtonPrefab, historyContent);
-            TMP_Text buttonText = newButton.GetComponentInChildren<TMP_Text>();
-
-            if (buttonText != null) {
-                buttonText.text = emailHistory[emailIndex].emailTitleText;
-            } else {
-                Debug.LogError("Botão de histórico não tem TMP_Text!");
             }
 
             newButton.onClick.AddListener(() => ShowHistoryEmail(emailIndex));
@@ -197,6 +167,24 @@ public class EmailManager : MonoBehaviour {
     public List<EmailHistoryEntry> GetEmailHistory() {
         return emailHistory;
     }
+
+    private void SaveEmailToHistory() {
+        emailHistory.Add(new EmailHistoryEntry(
+            currentEmailData.companyName,
+            currentEmailData.projectTitle,
+            currentEmailData.projectDescription,
+            "", // Ainda sem seleção
+            currentEmailData.tipoProblema,
+            TipoProblema.Nenhum, // Sem resposta ainda
+            "Pendente",
+            currentEmailData.trechoAntietico
+        ));
+    }
+
+    public void SaveAndUpdateHistory() {
+        SaveEmailToHistory();
+        UpdateHistoryUI();
+    }
 }
 
 // Classe que representa um e-mail no histórico
@@ -206,10 +194,11 @@ public class EmailHistoryEntry {
     public TipoProblema correctProblem;
     public TipoProblema chosenProblem;
     public string result;
-    public string companyNameText; // New field
-    public string emailTitleText; // New field
+    public string companyNameText;
+    public string emailTitleText;
+    public List<string> unethicalParts;
 
-    public EmailHistoryEntry(string companyNameText, string emailTitleText, string emailText, string selectedText, TipoProblema correctProblem, TipoProblema chosenProblem, string result) {
+    public EmailHistoryEntry(string companyNameText, string emailTitleText, string emailText, string selectedText, TipoProblema correctProblem, TipoProblema chosenProblem, string result, List<string> unethicalParts) {
         this.emailText = emailText;
         this.selectedText = selectedText;
         this.correctProblem = correctProblem;
@@ -217,5 +206,6 @@ public class EmailHistoryEntry {
         this.result = result;
         this.companyNameText = companyNameText;
         this.emailTitleText = emailTitleText;
+        this.unethicalParts = unethicalParts;
     }
 }

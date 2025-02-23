@@ -53,17 +53,32 @@ public class PillarCheck : MonoBehaviour {
             pontos = 30;
             feedbackColor = Color.green;
             resultado = "Correto";
-        } else if (emailData.hasEthicalIssue) {
-            Debug.Log("Esse e-mail realmente tem problema ético, mas a seleção foi incorreta.");
+        }
+        else if (!isSelectionCorrect && acertouTipoProblema){
+            Debug.Log("Há problema ético. Acertou o pilar, mas errou o trecho");
             pontos = 15;
             feedbackColor = Color.yellow;
+            resultado = "Acertou o pilar, errou o trecho.";
+        }
+        else if (isSelectionCorrect && !acertouTipoProblema) {
+            Debug.Log("Há problema ético. Acertou o trecho, mas errou o pilar");
+            pontos = 15;
+            feedbackColor = Color.yellow;
+            resultado = "Acertou o trecho, mas errou o pilar.";
+        } else if (emailData.hasEthicalIssue) {
+            Debug.Log("Há problema ético, mas não nesse trecho e nem nesse pilar.");
+            pontos = 15;
+            feedbackColor = Color.yellow;
+            resultado = "Há problema ético, mas não nesse trecho e nem nesse pilar.";
         } else {
             Debug.Log("Esse e-mail não tem problema ético!");
             pontos = -5;
+            resultado = "O email não contém problema ético.";
         }
 
         scoreManager.AddScore(pontos);
         StartCoroutine(displayEmail.FlashColor(feedbackColor));
+        emailManager.UpdateHistoryUI();
 
         // **Registrar no histórico**
         FindObjectOfType<EmailManager>().RegisterDecision(selectedText, tipoProblema, resultado);
