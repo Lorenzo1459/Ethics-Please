@@ -17,7 +17,7 @@ public class HistoryUI : MonoBehaviour {
 
         // Configurar os botões        
 
-        UpdateHistoryList();
+        //UpdateHistoryList();
         //historyPanel.SetActive(false);
     }
 

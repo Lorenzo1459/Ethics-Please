@@ -14,6 +14,7 @@ public class EmailManager : MonoBehaviour {
     private Queue<int> emailQueue = new Queue<int>();
     private List<int> indexList = new List<int>();
     private List<EmailHistoryEntry> emailHistory = new List<EmailHistoryEntry>(); // Histórico de e-mails   
+    private Dictionary<int, Color> emailButtonColors = new Dictionary<int, Color>();
 
     private int emailCount = 0;
     private float emailCooldown = 10f;
@@ -111,12 +112,19 @@ public class EmailManager : MonoBehaviour {
             unethicalParts
         );
 
-        UpdateHistoryUI();
+        //UpdateHistoryUI();
     }
 
-    public string HighlightUnethicalParts(string text, List<string> unethicalParts) {
+    /*public string HighlightUnethicalParts(string text, List<string> unethicalParts) {
         foreach (string part in unethicalParts) {
             text = text.Replace(part, $"<color=red>{part}</color>");
+        }
+        return text;
+    }*/
+    public string HighlightUnethicalParts(string text, List<string> unethicalParts) {
+        foreach (string part in unethicalParts) {
+            // Wrap the unethical part with <mark> and <color> tags
+            text = text.Replace(part, $"<mark=#FF000080><color=red>{part}</color></mark>");
         }
         return text;
     }
@@ -154,6 +162,10 @@ public class EmailManager : MonoBehaviour {
                 buttonText.text = emailHistory[emailIndex].emailTitleText;
             }
 
+            if (emailButtonColors.TryGetValue(emailIndex, out Color buttonColor)) {
+                newButton.GetComponent<Image>().color = buttonColor;
+            }
+
             newButton.onClick.AddListener(() => ShowHistoryEmail(emailIndex));
         }
     }
@@ -168,7 +180,8 @@ public class EmailManager : MonoBehaviour {
         return emailHistory;
     }
 
-    private void SaveEmailToHistory() {
+    public void SaveEmailToHistory(Color buttonColor) {
+        int emailIndex = emailHistory.Count;
         emailHistory.Add(new EmailHistoryEntry(
             currentEmailData.companyName,
             currentEmailData.projectTitle,
@@ -179,10 +192,12 @@ public class EmailManager : MonoBehaviour {
             "Pendente",
             currentEmailData.trechoAntietico
         ));
+
+        emailButtonColors[emailIndex] = buttonColor;        
     }
 
-    public void SaveAndUpdateHistory() {
-        SaveEmailToHistory();
+    public void SaveAndUpdateHistory(Color buttonColor) {
+        SaveEmailToHistory(buttonColor);
         UpdateHistoryUI();
     }
 }

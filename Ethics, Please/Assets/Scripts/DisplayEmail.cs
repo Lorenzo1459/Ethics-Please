@@ -19,6 +19,10 @@ public class DisplayEmail : MonoBehaviour {
     private int currentEmailIndex = -1;
     public ProposalData currentProposal;
 
+    public Button acceptButton; 
+    public Button rejectButton; 
+    public Button closeButton; 
+
     void Awake() {
         emailManager = FindObjectOfType<EmailManager>();
         background = GetComponent<Image>();
@@ -52,6 +56,8 @@ public class DisplayEmail : MonoBehaviour {
             currentProposal = proposal;
             currentEmailIndex = index;
         }
+
+        SetButtonsVisibility(true);
     }
 
     public void DisplayEmailData(ProposalData proposal) {
@@ -67,10 +73,12 @@ public class DisplayEmail : MonoBehaviour {
         projectDescriptionText.text = proposal.projectDescription.Replace("\\n", "\n");
 
         currentProposal = proposal;
+
+        SetButtonsVisibility(true);
     }
 
     public void DisplayEmailHistory(EmailHistoryEntry entry) {
-        this.gameObject.SetActive(true);
+        this.gameObject.SetActive(true);        
         companyNameText.text = entry.companyNameText; // Ou algum indicador visual
         projectTitleText.text = entry.emailTitleText;
         string highlightedText = emailManager.HighlightUnethicalParts(entry.emailText, entry.unethicalParts);
@@ -79,6 +87,20 @@ public class DisplayEmail : MonoBehaviour {
             "\n❌ Escolhido: " + entry.chosenProblem.ToString() +
             "\nTrecho destacado: " + entry.selectedText + "\n\n" +
             "\n\nResultado: " + entry.result + "\n\n";
+
+        SetButtonsVisibility(false);
+    }
+
+    private void SetButtonsVisibility(bool isNewEmail) {
+        if (acceptButton != null) {
+            acceptButton.gameObject.SetActive(isNewEmail);
+        }
+        if (rejectButton != null) {
+            rejectButton.gameObject.SetActive(isNewEmail);
+        }
+        if (closeButton != null) {
+            closeButton.gameObject.SetActive(true); // Botão Fechar sempre visível
+        }
     }
 
 
@@ -87,14 +109,17 @@ public class DisplayEmail : MonoBehaviour {
 
         if (currentProposal.hasEthicalIssue) {
             Debug.Log("Você aceitou um e-mail problemático! Isso terá consequências...");
-            StartCoroutine(FlashColor(Color.red));            
+            StartCoroutine(FlashColor(Color.red));
+            emailManager.SaveEmailToHistory(Color.red);
             scoreManager.AddScore(currentProposal.nivelProblema == NivelProblema.Leve ? -15 : -30);
         } else {
             Debug.Log("Bom trabalho! Você aceitou um e-mail ético.");
-            StartCoroutine(FlashColor(Color.green));            
+            StartCoroutine(FlashColor(Color.green));
+            emailManager.SaveEmailToHistory(Color.green);
             scoreManager.AddScore(20);
-        }        
-        StartCoroutine(CloseEmail());
+        }
+        
+        StartCoroutine(CloseEmail(1.5f));
     }
 
     public void RejectEmail() {
@@ -102,19 +127,25 @@ public class DisplayEmail : MonoBehaviour {
 
         if (currentProposal.hasEthicalIssue) {
             Debug.Log("Você corretamente rejeitou um e-mail problemático!");
-            StartCoroutine(FlashColor(Color.green));            
+            StartCoroutine(FlashColor(Color.green));
+            emailManager.SaveEmailToHistory(Color.green);
             scoreManager.AddScore(10);
         } else {
             Debug.Log("Você rejeitou um e-mail legítimo...");
-            StartCoroutine(FlashColor(Color.red));            
+            StartCoroutine(FlashColor(Color.red));
+            emailManager.SaveEmailToHistory(Color.red);
             scoreManager.AddScore(-10);
         }        
-        StartCoroutine(CloseEmail());
+        StartCoroutine(CloseEmail(1.5f));
     }
 
-    public IEnumerator CloseEmail() {
-        yield return new WaitForSeconds(1.5f);
-        emailManager.SaveAndUpdateHistory();
+    public void CallCloseEmail() {
+       StartCoroutine(CloseEmail(0.1f));
+    }
+
+    public IEnumerator CloseEmail(float time) {
+        yield return new WaitForSeconds(time);
+        emailManager.UpdateHistoryUI();
         this.gameObject.SetActive(false);
     }
 

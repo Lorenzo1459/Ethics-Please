@@ -10,6 +10,7 @@ public class PillarCheck : MonoBehaviour {
     public EmailManager emailManager;
     private ProposalData emailData;
     private ScoreManager scoreManager;
+    public GameObject rulebookPanel;
 
     public TMP_InputField emailInputField; // Referência ao campo de texto onde o e-mail aparece
     public float tolerance = 0.5f; // Ajuste para flexibilidade da seleção
@@ -18,6 +19,17 @@ public class PillarCheck : MonoBehaviour {
         displayEmail = FindObjectOfType<DisplayEmail>();
         emailManager = FindObjectOfType<EmailManager>();
         scoreManager = FindObjectOfType<ScoreManager>();
+
+        if (rulebookPanel != null) {
+            rulebookPanel.SetActive(true); // Ativa o painel
+            rulebookPanel.SetActive(false); // Desativa o painel
+        }
+    }
+
+    public void ToggleRulebookPanel() {
+        if (rulebookPanel != null) {
+            rulebookPanel.SetActive(!rulebookPanel.activeSelf);
+        }
     }
 
     public void CheckEthicalIssue(TipoProblema tipoProblema) {
@@ -78,12 +90,12 @@ public class PillarCheck : MonoBehaviour {
 
         scoreManager.AddScore(pontos);
         StartCoroutine(displayEmail.FlashColor(feedbackColor));
-        emailManager.UpdateHistoryUI();
+        emailManager.SaveEmailToHistory(feedbackColor);
 
         // **Registrar no histórico**
         FindObjectOfType<EmailManager>().RegisterDecision(selectedText, tipoProblema, resultado);
 
-        StartCoroutine(displayEmail.CloseEmail());
+        StartCoroutine(displayEmail.CloseEmail(1.5f));
     }
 
     private string GetSelectedText() {
