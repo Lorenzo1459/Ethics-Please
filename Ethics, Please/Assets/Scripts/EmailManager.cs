@@ -69,7 +69,7 @@ public class EmailManager : MonoBehaviour {
             Transform parentObject = emailCountText.transform.parent;
 
             if (emailCount > 0) {
-                emailCountText.text = $"📩 {emailCount}";
+                emailCountText.text = $"{emailCount}";
                 if (parentObject != null) parentObject.gameObject.SetActive(true);
             } else {
                 if (parentObject != null) parentObject.gameObject.SetActive(false);

@@ -26,7 +26,6 @@ MonoBehaviour:
   tipoProblema: 1
   nivelProblema: 1
   trechoAntietico:
-  - "Nossa IA analisa curr\xEDculos e filtra os melhores candidatos com base em um
-    modelo de aprendizado avan\xE7ado."
-  - "Para evitar distra\xE7\xF5es e reclama\xE7\xF5es, o algoritmo opera sem transpar\xEAncia
+  - "sem necessidade de justificar rejei\xE7\xF5es"
+  - "evitar distra\xE7\xF5es e reclama\xE7\xF5es, o algoritmo opera sem transpar\xEAncia
     total"

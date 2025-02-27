@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using TMPro; // Importação necessária para lidar com TMP_InputField
+using TMPro;
+using System.Linq;
 
 public class PillarCheck : MonoBehaviour {
     public DisplayEmail displayEmail;
@@ -34,6 +35,10 @@ public class PillarCheck : MonoBehaviour {
 
     public void CheckEthicalIssue(TipoProblema tipoProblema) {
         emailData = displayEmail.currentProposal;
+        int totalLength = emailData.trechoAntietico.Sum(p => p.Length);
+        float averageProblemSize = (float)totalLength / emailData.trechoAntietico.Count;
+        float minAllowedSelectionSize = averageProblemSize * 0.5f;
+        float maxAllowedSelectionSize = averageProblemSize * 2.5f;
 
         if (emailData == null) {
             Debug.LogWarning("Nenhum e-mail carregado.");
@@ -46,10 +51,22 @@ public class PillarCheck : MonoBehaviour {
             return;
         }
 
+        if (selectedText.Length > maxAllowedSelectionSize) { // Verifica se a seleção é mt grande
+            Debug.Log("Seleção muito grande! Tente selecionar um trecho mais específico.");
+            displayEmail.CallResultFeedback("Tente novamente", "Selecao grande");
+            return;
+        }
+
+        if (selectedText.Length < minAllowedSelectionSize) {
+            Debug.Log("Seleção muito pequena! Tente selecionar um trecho mais completo.");
+            displayEmail.CallResultFeedback("Tente novamente", "Selecao pequena");
+            return;
+        }
+
         bool isSelectionCorrect = false;
 
         foreach (string problem in emailData.trechoAntietico) {
-            if (IsSimilar(selectedText.ToLower(), problem.ToLower())) {
+            if (IsSimilar(selectedText.ToLower(), emailData.trechoAntietico.Select(p => p.ToLower()).ToList())) {
                 isSelectionCorrect = true;
                 break;
             }
@@ -65,26 +82,31 @@ public class PillarCheck : MonoBehaviour {
             pontos = 30;
             feedbackColor = Color.green;
             resultado = "Correto";
+            displayEmail.CallResultFeedback("Correto", "Acertou ambos");
         }
         else if (!isSelectionCorrect && acertouTipoProblema){
             Debug.Log("Há problema ético. Acertou o pilar, mas errou o trecho");
             pontos = 15;
             feedbackColor = Color.yellow;
+            displayEmail.CallResultFeedback("Quase", "Errou trecho");
             resultado = "Acertou o pilar, errou o trecho.";
         }
         else if (isSelectionCorrect && !acertouTipoProblema) {
             Debug.Log("Há problema ético. Acertou o trecho, mas errou o pilar");
             pontos = 15;
             feedbackColor = Color.yellow;
+            displayEmail.CallResultFeedback("Quase", "Errou pilar");
             resultado = "Acertou o trecho, mas errou o pilar.";
         } else if (emailData.hasEthicalIssue) {
             Debug.Log("Há problema ético, mas não nesse trecho e nem nesse pilar.");
             pontos = 15;
             feedbackColor = Color.yellow;
+            displayEmail.CallResultFeedback("Quase", "Errou ambos");
             resultado = "Há problema ético, mas não nesse trecho e nem nesse pilar.";
         } else {
             Debug.Log("Esse e-mail não tem problema ético!");
             pontos = -5;
+            displayEmail.CallResultFeedback("Errado", "Rejeitou etico");
             resultado = "O email não contém problema ético.";
         }
 
@@ -115,7 +137,7 @@ public class PillarCheck : MonoBehaviour {
         return emailInputField.text.Substring(start, end - start);
     }
 
-    private bool IsSimilar(string selected, string problem) {
+    /*private bool IsSimilar(string selected, string problem) {
         if (problem.Contains(selected)) return true; // Se o trecho exato estiver dentro do problema, já conta.
 
         int maxMatchingChars = 0;
@@ -131,6 +153,26 @@ public class PillarCheck : MonoBehaviour {
 
         float similarity = (float)maxMatchingChars / selected.Length;
         return similarity >= tolerance;
+    }*/
+
+    private bool IsSimilar(string selected, List<string> problems) {
+        foreach (string problem in problems) {
+            if (selected.Contains(problem)) return true; // Se contém exatamente um dos problemas, já aceita.
+
+            int matchingChars = 0;
+            int minLength = Mathf.Min(selected.Length, problem.Length);
+
+            for (int i = 0; i < minLength; i++) {
+                if (selected[i] == problem[i]) matchingChars++;
+            }
+
+            float penalty = (float)problem.Length / selected.Length;
+            float similarity = ((float)matchingChars / problem.Length) * penalty;
+
+            if (similarity >= tolerance) return true;
+        }
+
+        return false;
     }
 
     public void FalibilidadeCheck() {

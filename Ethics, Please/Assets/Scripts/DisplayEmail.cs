@@ -21,7 +21,8 @@ public class DisplayEmail : MonoBehaviour {
 
     public Button acceptButton; 
     public Button rejectButton; 
-    public Button closeButton; 
+    public Button closeButton;
+    public GameObject resultFeedback;
 
     void Awake() {
         emailManager = FindObjectOfType<EmailManager>();
@@ -111,11 +112,13 @@ public class DisplayEmail : MonoBehaviour {
             Debug.Log("Você aceitou um e-mail problemático! Isso terá consequências...");
             StartCoroutine(FlashColor(Color.red));
             emailManager.SaveEmailToHistory(Color.red);
+            CallResultFeedback("Errado", "Aceitou antietico");
             scoreManager.AddScore(currentProposal.nivelProblema == NivelProblema.Leve ? -15 : -30);
         } else {
             Debug.Log("Bom trabalho! Você aceitou um e-mail ético.");
             StartCoroutine(FlashColor(Color.green));
             emailManager.SaveEmailToHistory(Color.green);
+            CallResultFeedback("Correto", "Aceitou etico");
             scoreManager.AddScore(20);
         }
         
@@ -129,11 +132,13 @@ public class DisplayEmail : MonoBehaviour {
             Debug.Log("Você corretamente rejeitou um e-mail problemático!");
             StartCoroutine(FlashColor(Color.green));
             emailManager.SaveEmailToHistory(Color.green);
+            CallResultFeedback("Correto", "Rejeitou antietico");
             scoreManager.AddScore(10);
         } else {
             Debug.Log("Você rejeitou um e-mail legítimo...");
             StartCoroutine(FlashColor(Color.red));
             emailManager.SaveEmailToHistory(Color.red);
+            CallResultFeedback("Errado", "Rejeitou etico");
             scoreManager.AddScore(-10);
         }        
         StartCoroutine(CloseEmail(1.5f));
@@ -147,6 +152,68 @@ public class DisplayEmail : MonoBehaviour {
         yield return new WaitForSeconds(time);
         emailManager.UpdateHistoryUI();
         this.gameObject.SetActive(false);
+    }
+
+    public void CallResultFeedback(string result, string caso) {
+        StartCoroutine(ResultFeedback(result, caso));
+    }
+
+    public IEnumerator ResultFeedback(string result, string caso) {
+        resultFeedback.SetActive(true);
+        switch (result) {
+            case "Correto":
+                resultFeedback.GetComponent<Image>().color = new Color(0.2235f, 0.8588f, 0.2510f, 1f); // Verde
+                break;
+            case "Quase":
+                resultFeedback.GetComponent<Image>().color = new Color(0.8588f, 0.6980f, 0.2235f, 1f);  // Amarelo          
+                break;
+            case "Errado":
+                resultFeedback.GetComponent<Image>().color = new Color(0.8588f, 0.2235f, 0.2627f, 1f);  // Vermelho         
+                break;
+            case "Tente novamente":
+                resultFeedback.GetComponent<Image>().color = new Color(0.349f, 0.345f, 0.337f, 1f); // Cinza
+                break;
+            default:
+                Debug.Log("Resultado não encontrado.");
+                break;
+        }
+        switch (caso) {
+            case "Acertou ambos":
+                resultFeedback.GetComponentInChildren<TMP_Text>().text = "Parabéns! Você acertou o trecho e o pilar!";
+                break;
+            case "Aceitou etico":
+                resultFeedback.GetComponentInChildren<TMP_Text>().text = "Bom trabalho! Você aceitou um e-mail ético.";
+                break;
+            case "Rejeitou etico":
+                resultFeedback.GetComponentInChildren<TMP_Text>().text = "Poxa... Você rejeitou um e-mail ético!";
+                break;
+            case "Aceitou antietico":
+                resultFeedback.GetComponentInChildren<TMP_Text>().text = "Você aceitou um e-mail problemático! Isso terá consequências...";
+                break;
+            case "Rejeitou antietico":
+                resultFeedback.GetComponentInChildren<TMP_Text>().text = "Você corretamente rejeitou um e-mail problemático!";
+                break;
+            case "Errou pilar":
+                resultFeedback.GetComponentInChildren<TMP_Text>().text = "Você acertou o trecho, mas não é esse pilar!";
+                break;
+            case "Errou trecho":
+                resultFeedback.GetComponentInChildren<TMP_Text>().text = "Você acertou o pilar, mas não é esse trecho!";
+                break;
+            case "Errou ambos":
+                resultFeedback.GetComponentInChildren<TMP_Text>().text = "Era um e-mail problemático, mas não nesse trecho e nem desse pilar!";
+                break;
+            case "Selecao grande":
+                resultFeedback.GetComponentInChildren<TMP_Text>().text = "Seleção muito grande! Tente selecionar um trecho mais específico.";
+                break;
+            case "Selecao pequena":
+                resultFeedback.GetComponentInChildren<TMP_Text>().text = "Seleção muito pequena! Tente selecionar um trecho maior.";
+                break;
+            default:
+                Debug.Log("Caso não encontrado.");
+                break;
+        }
+        yield return new WaitForSeconds(1.5f);
+        resultFeedback.SetActive(false);
     }
 
     public IEnumerator FlashColor(Color flashColor) {

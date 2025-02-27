@@ -25,5 +25,6 @@ MonoBehaviour:
   tipoProblema: 3
   nivelProblema: 3
   trechoAntietico:
-  - nossa IA evita erros humanos
+  - Ao basear suas escolhas nos perfis que tiveram sucesso no passado, nossa IA evita
+    erros humanos
   - O sistema descarta automaticamente perfis com baixa compatibilidade
