@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class EmailManager : MonoBehaviour {
     public ProposalDatabase proposalDatabase;
+    private SFXManager sFXManager;
     public TMP_Text emailCountText; // Contador de e-mails no botão
     public GameObject historyPanel; // Painel do histórico
     public Transform historyContent; // Parent dos botões do histórico
@@ -23,6 +24,9 @@ public class EmailManager : MonoBehaviour {
 
     private void Start() {
         displayEmail = FindObjectOfType<DisplayEmail>();
+        sFXManager = FindObjectOfType<SFXManager>();
+
+        sFXManager.SetVolume(.3f);
 
         for (int i = 0; i < proposalDatabase.proposals.Count; i++) {
             indexList.Add(i);
@@ -59,6 +63,7 @@ public class EmailManager : MonoBehaviour {
             yield return new WaitForSeconds(emailCooldown);
             if (emailQueue.Count > 0) {
                 emailCount++;
+                sFXManager.PlaySFX(0); // 0 - New Email
                 UpdateEmailCountUI();
             }
         }
@@ -80,6 +85,7 @@ public class EmailManager : MonoBehaviour {
     private IEnumerator DelayedFirstEmail(float delay) {
         yield return new WaitForSeconds(delay);
         emailCount++;
+        sFXManager.PlaySFX(0); // 0 - New Email
         UpdateEmailCountUI();
     }
 

@@ -5,10 +5,12 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 using System.Linq;
+using UnityEngine.VFX;
 
 public class PillarCheck : MonoBehaviour {
-    public DisplayEmail displayEmail;
-    public EmailManager emailManager;
+    private DisplayEmail displayEmail;
+    private EmailManager emailManager;
+    private SFXManager sFXManager;
     private ProposalData emailData;
     private ScoreManager scoreManager;
     public GameObject rulebookPanel;
@@ -20,6 +22,7 @@ public class PillarCheck : MonoBehaviour {
         displayEmail = FindObjectOfType<DisplayEmail>();
         emailManager = FindObjectOfType<EmailManager>();
         scoreManager = FindObjectOfType<ScoreManager>();
+        sFXManager = FindObjectOfType<SFXManager>();
 
         if (rulebookPanel != null) {
             rulebookPanel.SetActive(true); // Ativa o painel
@@ -82,6 +85,7 @@ public class PillarCheck : MonoBehaviour {
             pontos = 30;
             feedbackColor = Color.green;
             resultado = "Correto";
+            sFXManager.PlaySFX(1); // 1 - Certo
             displayEmail.CallResultFeedback("Correto", "Acertou ambos");
         }
         else if (!isSelectionCorrect && acertouTipoProblema){
@@ -106,6 +110,7 @@ public class PillarCheck : MonoBehaviour {
         } else {
             Debug.Log("Esse e-mail não tem problema ético!");
             pontos = -5;
+            sFXManager.PlaySFX(2); // 2 - Errado
             displayEmail.CallResultFeedback("Errado", "Rejeitou etico");
             resultado = "O email não contém problema ético.";
         }

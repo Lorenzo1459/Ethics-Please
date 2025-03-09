@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class DisplayEmail : MonoBehaviour {
     private EmailManager emailManager;
     private ScoreManager scoreManager;
+    private SFXManager sFXManager;
 
     public TMP_Text companyNameText;
     public TMP_Text projectTitleText;
@@ -32,6 +33,7 @@ public class DisplayEmail : MonoBehaviour {
 
     void Start() {
         scoreManager = FindObjectOfType<ScoreManager>();
+        sFXManager  = FindObjectOfType<SFXManager>();
         this.gameObject.SetActive(false);
     }
 
@@ -111,12 +113,14 @@ public class DisplayEmail : MonoBehaviour {
         if (currentProposal.hasEthicalIssue) {
             Debug.Log("Você aceitou um e-mail problemático! Isso terá consequências...");
             StartCoroutine(FlashColor(Color.red));
+            sFXManager.PlaySFX(2); // 2 - Errado
             emailManager.SaveEmailToHistory(Color.red);
             CallResultFeedback("Errado", "Aceitou antietico");
             scoreManager.AddScore(currentProposal.nivelProblema == NivelProblema.Leve ? -15 : -30);
         } else {
             Debug.Log("Bom trabalho! Você aceitou um e-mail ético.");
             StartCoroutine(FlashColor(Color.green));
+            sFXManager.PlaySFX(1); // 1 - Certo
             emailManager.SaveEmailToHistory(Color.green);
             CallResultFeedback("Correto", "Aceitou etico");
             scoreManager.AddScore(20);
@@ -131,12 +135,14 @@ public class DisplayEmail : MonoBehaviour {
         if (currentProposal.hasEthicalIssue) {
             Debug.Log("Você corretamente rejeitou um e-mail problemático!");
             StartCoroutine(FlashColor(Color.green));
+            sFXManager.PlaySFX(1); // 1 - Certo
             emailManager.SaveEmailToHistory(Color.green);
             CallResultFeedback("Correto", "Rejeitou antietico");
             scoreManager.AddScore(10);
         } else {
             Debug.Log("Você rejeitou um e-mail legítimo...");
             StartCoroutine(FlashColor(Color.red));
+            sFXManager.PlaySFX(2); // 2 - Errado
             emailManager.SaveEmailToHistory(Color.red);
             CallResultFeedback("Errado", "Rejeitou etico");
             scoreManager.AddScore(-10);
