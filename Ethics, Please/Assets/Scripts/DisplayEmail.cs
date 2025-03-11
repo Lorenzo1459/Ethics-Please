@@ -20,10 +20,11 @@ public class DisplayEmail : MonoBehaviour {
     private int currentEmailIndex = -1;
     public ProposalData currentProposal;
 
-    public Button acceptButton; 
-    public Button rejectButton; 
+    public Button acceptButton;
+    public Button rejectButton;
     public Button closeButton;
     public GameObject resultFeedback;
+    private bool isProcessingDecision = false; // Variável de controle
 
     void Awake() {
         emailManager = FindObjectOfType<EmailManager>();
@@ -33,7 +34,7 @@ public class DisplayEmail : MonoBehaviour {
 
     void Start() {
         scoreManager = FindObjectOfType<ScoreManager>();
-        sFXManager  = FindObjectOfType<SFXManager>();
+        sFXManager = FindObjectOfType<SFXManager>();
         this.gameObject.SetActive(false);
     }
 
@@ -81,7 +82,7 @@ public class DisplayEmail : MonoBehaviour {
     }
 
     public void DisplayEmailHistory(EmailHistoryEntry entry) {
-        this.gameObject.SetActive(true);        
+        this.gameObject.SetActive(true);
         companyNameText.text = entry.companyNameText; // Ou algum indicador visual
         projectTitleText.text = entry.emailTitleText;
         string highlightedText = emailManager.HighlightUnethicalParts(entry.emailText, entry.unethicalParts);
@@ -106,9 +107,10 @@ public class DisplayEmail : MonoBehaviour {
         }
     }
 
-
     public void AcceptEmail() {
-        if (currentProposal == null) return;
+        if (isProcessingDecision || currentProposal == null) return; // Evita cliques múltiplos
+
+        isProcessingDecision = true; // Bloqueia cliques adicionais
 
         if (currentProposal.hasEthicalIssue) {
             Debug.Log("Você aceitou um e-mail problemático! Isso terá consequências...");
@@ -125,12 +127,14 @@ public class DisplayEmail : MonoBehaviour {
             CallResultFeedback("Correto", "Aceitou etico");
             scoreManager.AddScore(20);
         }
-        
+
         StartCoroutine(CloseEmail(1.5f));
     }
 
     public void RejectEmail() {
-        if (currentProposal == null) return;
+        if (isProcessingDecision || currentProposal == null) return; // Evita cliques múltiplos
+
+        isProcessingDecision = true; // Bloqueia cliques adicionais
 
         if (currentProposal.hasEthicalIssue) {
             Debug.Log("Você corretamente rejeitou um e-mail problemático!");
@@ -146,18 +150,19 @@ public class DisplayEmail : MonoBehaviour {
             emailManager.SaveEmailToHistory(Color.red);
             CallResultFeedback("Errado", "Rejeitou etico");
             scoreManager.AddScore(-10);
-        }        
+        }
         StartCoroutine(CloseEmail(1.5f));
     }
 
     public void CallCloseEmail() {
-       StartCoroutine(CloseEmail(0.1f));
+        StartCoroutine(CloseEmail(0.1f));
     }
 
     public IEnumerator CloseEmail(float time) {
         yield return new WaitForSeconds(time);
         emailManager.UpdateHistoryUI();
         this.gameObject.SetActive(false);
+        isProcessingDecision = false; // Reativa os botões
     }
 
     public void CallResultFeedback(string result, string caso) {

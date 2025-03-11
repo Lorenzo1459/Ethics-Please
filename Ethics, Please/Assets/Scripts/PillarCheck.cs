@@ -5,7 +5,6 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 using System.Linq;
-using UnityEngine.VFX;
 
 public class PillarCheck : MonoBehaviour {
     private DisplayEmail displayEmail;
@@ -16,7 +15,7 @@ public class PillarCheck : MonoBehaviour {
     public GameObject rulebookPanel;
 
     public TMP_InputField emailInputField; // Referência ao campo de texto onde o e-mail aparece
-    public float tolerance = 0.5f; // Ajuste para flexibilidade da seleção
+    public float tolerance = 0.5f; // Ajuste para flexibilidade da seleção   
 
     private void Start() {
         displayEmail = FindObjectOfType<DisplayEmail>();
@@ -87,15 +86,13 @@ public class PillarCheck : MonoBehaviour {
             resultado = "Correto";
             sFXManager.PlaySFX(1); // 1 - Certo
             displayEmail.CallResultFeedback("Correto", "Acertou ambos");
-        }
-        else if (!isSelectionCorrect && acertouTipoProblema){
+        } else if (!isSelectionCorrect && acertouTipoProblema) {
             Debug.Log("Há problema ético. Acertou o pilar, mas errou o trecho");
             pontos = 15;
             feedbackColor = Color.yellow;
             displayEmail.CallResultFeedback("Quase", "Errou trecho");
             resultado = "Acertou o pilar, errou o trecho.";
-        }
-        else if (isSelectionCorrect && !acertouTipoProblema) {
+        } else if (isSelectionCorrect && !acertouTipoProblema) {
             Debug.Log("Há problema ético. Acertou o trecho, mas errou o pilar");
             pontos = 15;
             feedbackColor = Color.yellow;
@@ -141,24 +138,6 @@ public class PillarCheck : MonoBehaviour {
 
         return emailInputField.text.Substring(start, end - start);
     }
-
-    /*private bool IsSimilar(string selected, string problem) {
-        if (problem.Contains(selected)) return true; // Se o trecho exato estiver dentro do problema, já conta.
-
-        int maxMatchingChars = 0;
-
-        for (int i = 0; i <= problem.Length - selected.Length; i++) {
-            int matchingChars = 0;
-            for (int j = 0; j < selected.Length; j++) {
-                if (problem[i + j] == selected[j]) matchingChars++;
-            }
-
-            maxMatchingChars = Mathf.Max(maxMatchingChars, matchingChars);
-        }
-
-        float similarity = (float)maxMatchingChars / selected.Length;
-        return similarity >= tolerance;
-    }*/
 
     private bool IsSimilar(string selected, List<string> problems) {
         foreach (string problem in problems) {

@@ -23,8 +23,18 @@ public class SFXManager : MonoBehaviour {
             Debug.LogWarning("SFX index out of range!");
             return;
         }
-
+        
         sfxSource.PlayOneShot(sfxClips[index]);
+    }
+
+    public void PlaySFXLoop(int index) {
+        if (index < 0 || index >= sfxClips.Length) {
+            Debug.LogWarning("SFX index out of range!");
+            return;
+        }
+        sfxSource.clip = sfxClips[index];
+        sfxSource.loop = true;
+        sfxSource.Play();
     }
 
     public void PlaySFX(AudioClip clip) {
