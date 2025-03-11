@@ -139,6 +139,24 @@ public class PillarCheck : MonoBehaviour {
         return emailInputField.text.Substring(start, end - start);
     }
 
+    /*private bool IsSimilar(string selected, string problem) {
+        if (problem.Contains(selected)) return true; // Se o trecho exato estiver dentro do problema, j? conta.
+
+        int maxMatchingChars = 0;
+
+        for (int i = 0; i <= problem.Length - selected.Length; i++) {
+            int matchingChars = 0;
+            for (int j = 0; j < selected.Length; j++) {
+                if (problem[i + j] == selected[j]) matchingChars++;
+            }
+
+            maxMatchingChars = Mathf.Max(maxMatchingChars, matchingChars);
+        }
+
+        float similarity = (float)maxMatchingChars / selected.Length;
+        return similarity >= tolerance;
+    }*/
+
     private bool IsSimilar(string selected, List<string> problems) {
         foreach (string problem in problems) {
             if (selected.Contains(problem)) return true; // Se contém exatamente um dos problemas, já aceita.
