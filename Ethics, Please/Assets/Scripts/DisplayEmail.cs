@@ -19,6 +19,7 @@ public class DisplayEmail : MonoBehaviour {
 
     private int currentEmailIndex = -1;
     public ProposalData currentProposal;
+    public PillarCheck pillarCheck;
 
     public Button acceptButton;
     public Button rejectButton;
@@ -61,6 +62,7 @@ public class DisplayEmail : MonoBehaviour {
             currentEmailIndex = index;
         }
 
+        pillarCheck.NovoEmailCarregado();
         SetButtonsVisibility(true);
     }
 
@@ -192,6 +194,12 @@ public class DisplayEmail : MonoBehaviour {
             case "Acertou ambos":
                 resultFeedback.GetComponentInChildren<TMP_Text>().text = "Parabéns! Você acertou o trecho e o pilar!";
                 break;
+            case "Acertou sem selecao":
+                resultFeedback.GetComponentInChildren<TMP_Text>().text = "Bom trabalho! Você acertou o pilar!";
+                break;
+            case "Errou pilar sem selecao":
+                resultFeedback.GetComponentInChildren<TMP_Text>().text = "Quase! Há um problema ética, mas não desse pilar.";
+                break;
             case "Aceitou etico":
                 resultFeedback.GetComponentInChildren<TMP_Text>().text = "Bom trabalho! Você aceitou um e-mail ético.";
                 break;
@@ -225,6 +233,10 @@ public class DisplayEmail : MonoBehaviour {
         }
         yield return new WaitForSeconds(1.5f);
         resultFeedback.SetActive(false);
+    }
+
+    public bool IsEmailOpen() {
+        return this.gameObject.activeSelf; // ou outra lógica que você usa para exibir o e-mail
     }
 
     public IEnumerator FlashColor(Color flashColor) {

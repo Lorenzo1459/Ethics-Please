@@ -90,6 +90,11 @@ public class EmailManager : MonoBehaviour {
     }
 
     public void ShowNextEmail() {
+        if (displayEmail.IsEmailOpen()) {
+            Debug.Log("Feche o e-mail atual antes de abrir outro.");
+            return;
+        }
+
         if (emailCount > 0 && emailQueue.Count > 0) {
             int nextEmailIndex = emailQueue.Dequeue();
             currentEmailData = proposalDatabase.proposals[nextEmailIndex];

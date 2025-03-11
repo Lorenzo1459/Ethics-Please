@@ -1,4 +1,4 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -14,8 +14,12 @@ public class PillarCheck : MonoBehaviour {
     private ScoreManager scoreManager;
     public GameObject rulebookPanel;
 
-    public TMP_InputField emailInputField; // ReferÍncia ao campo de texto onde o e-mail aparece
-    public float tolerance = 0.5f; // Ajuste para flexibilidade da seleÁ„o   
+    public TMP_InputField emailInputField; // Refer√™ncia ao campo de texto onde o e-mail aparece
+    public float tolerance = 0.5f; // Ajuste para flexibilidade da sele√ß√£o   
+
+    private bool isChecking = false;
+    private bool jaVerificouEsseEmail = false;
+    private float checkCooldown = 1.6f;
 
     private void Start() {
         displayEmail = FindObjectOfType<DisplayEmail>();
@@ -36,90 +40,112 @@ public class PillarCheck : MonoBehaviour {
     }
 
     public void CheckEthicalIssue(TipoProblema tipoProblema) {
-        emailData = displayEmail.currentProposal;
-        int totalLength = emailData.trechoAntietico.Sum(p => p.Length);
-        float averageProblemSize = (float)totalLength / emailData.trechoAntietico.Count;
-        float minAllowedSelectionSize = averageProblemSize * 0.5f;
-        float maxAllowedSelectionSize = averageProblemSize * 2.5f;
+        if (isChecking || jaVerificouEsseEmail) return;
+        isChecking = true;
+        StartCoroutine(ResetCheckCooldown());
 
+        emailData = displayEmail.currentProposal;
         if (emailData == null) {
             Debug.LogWarning("Nenhum e-mail carregado.");
             return;
         }
 
         string selectedText = GetSelectedText();
-        if (string.IsNullOrEmpty(selectedText)) {
-            Debug.LogWarning("Nenhum texto selecionado!");
-            return;
-        }
+        bool hasSelection = !string.IsNullOrEmpty(selectedText);
 
-        if (selectedText.Length > maxAllowedSelectionSize) { // Verifica se a seleÁ„o È mt grande
-            Debug.Log("SeleÁ„o muito grande! Tente selecionar um trecho mais especÌfico.");
-            displayEmail.CallResultFeedback("Tente novamente", "Selecao grande");
-            return;
-        }
-
-        if (selectedText.Length < minAllowedSelectionSize) {
-            Debug.Log("SeleÁ„o muito pequena! Tente selecionar um trecho mais completo.");
-            displayEmail.CallResultFeedback("Tente novamente", "Selecao pequena");
-            return;
-        }
-
-        bool isSelectionCorrect = false;
-
-        foreach (string problem in emailData.trechoAntietico) {
-            if (IsSimilar(selectedText.ToLower(), emailData.trechoAntietico.Select(p => p.ToLower()).ToList())) {
-                isSelectionCorrect = true;
-                break;
-            }
-        }
-
-        bool acertouTipoProblema = emailData.tipoProblema == tipoProblema;
         int pontos = 0;
         Color feedbackColor = Color.red;
         string resultado = "Incorreto";
 
-        if (isSelectionCorrect && acertouTipoProblema) {
-            Debug.Log("Esse e-mail realmente tem problema Ètico " + tipoProblema + " e a seleÁ„o foi correta!");
-            pontos = 30;
-            feedbackColor = Color.green;
-            resultado = "Correto";
-            sFXManager.PlaySFX(1); // 1 - Certo
-            displayEmail.CallResultFeedback("Correto", "Acertou ambos");
-        } else if (!isSelectionCorrect && acertouTipoProblema) {
-            Debug.Log("H· problema Ètico. Acertou o pilar, mas errou o trecho");
-            pontos = 15;
-            feedbackColor = Color.yellow;
-            displayEmail.CallResultFeedback("Quase", "Errou trecho");
-            resultado = "Acertou o pilar, errou o trecho.";
-        } else if (isSelectionCorrect && !acertouTipoProblema) {
-            Debug.Log("H· problema Ètico. Acertou o trecho, mas errou o pilar");
-            pontos = 15;
-            feedbackColor = Color.yellow;
-            displayEmail.CallResultFeedback("Quase", "Errou pilar");
-            resultado = "Acertou o trecho, mas errou o pilar.";
-        } else if (emailData.hasEthicalIssue) {
-            Debug.Log("H· problema Ètico, mas n„o nesse trecho e nem nesse pilar.");
-            pontos = 15;
-            feedbackColor = Color.yellow;
-            displayEmail.CallResultFeedback("Quase", "Errou ambos");
-            resultado = "H· problema Ètico, mas n„o nesse trecho e nem nesse pilar.";
+        if (hasSelection) {
+            // **Caso 1: Com sele√ß√£o de texto**
+            int totalLength = emailData.trechoAntietico.Sum(p => p.Length);
+            float averageProblemSize = (float)totalLength / emailData.trechoAntietico.Count;
+            float minAllowedSelectionSize = averageProblemSize * 0.5f;
+            float maxAllowedSelectionSize = averageProblemSize * 2.5f;
+
+            if (selectedText.Length > maxAllowedSelectionSize) {
+                Debug.Log("Sele√ß√£o muito grande! Tente um trecho mais espec√≠fico.");
+                displayEmail.CallResultFeedback("Tente novamente", "Selecao grande");
+                isChecking = false;
+                return;
+            }
+
+            if (selectedText.Length < minAllowedSelectionSize) {
+                Debug.Log("Sele√ß√£o muito pequena! Tente um trecho mais completo.");
+                displayEmail.CallResultFeedback("Tente novamente", "Selecao pequena");
+                isChecking = false;
+                return;
+            }
+
+            bool isSelectionCorrect = IsSimilar(selectedText.ToLower(), emailData.trechoAntietico.Select(p => p.ToLower()).ToList());
+            bool acertouTipoProblema = emailData.tipoProblema == tipoProblema;
+
+            if (isSelectionCorrect && acertouTipoProblema) {
+                pontos = 30; // M√°ximo de pontos por acertar tudo
+                feedbackColor = Color.green;
+                resultado = "Correto";
+                sFXManager.PlaySFX(1);
+                displayEmail.CallResultFeedback("Correto", "Acertou ambos");
+            } else if (!isSelectionCorrect && acertouTipoProblema) {
+                pontos = 15; // Acertou o pilar, mas n√£o o trecho
+                feedbackColor = Color.yellow;
+                resultado = "Acertou o pilar, errou o trecho.";
+                displayEmail.CallResultFeedback("Quase", "Errou trecho");
+            } else if (isSelectionCorrect && !acertouTipoProblema) {
+                pontos = 15; // Acertou o trecho, mas errou o pilar
+                feedbackColor = Color.yellow;
+                resultado = "Acertou o trecho, mas errou o pilar.";
+                displayEmail.CallResultFeedback("Quase", "Errou pilar");
+            } else if (emailData.hasEthicalIssue) {
+                pontos = 10; // Pelo menos percebeu que havia um problema
+                feedbackColor = Color.yellow;
+                resultado = "H√° problema √©tico, mas n√£o nesse trecho e nem nesse pilar.";
+                displayEmail.CallResultFeedback("Quase", "Errou ambos");
+            } else {
+                pontos = -5; // O email era √©tico, mas foi marcado como problem√°tico
+                sFXManager.PlaySFX(2);
+                displayEmail.CallResultFeedback("Errado", "Rejeitou etico");
+                resultado = "O email n√£o cont√©m problema √©tico.";
+            }
         } else {
-            Debug.Log("Esse e-mail n„o tem problema Ètico!");
-            pontos = -5;
-            sFXManager.PlaySFX(2); // 2 - Errado
-            displayEmail.CallResultFeedback("Errado", "Rejeitou etico");
-            resultado = "O email n„o contÈm problema Ètico.";
+            // **Caso 2: Sem sele√ß√£o de texto**
+            bool acertouTipoProblema = emailData.tipoProblema == tipoProblema;
+
+            if (acertouTipoProblema) {
+                pontos = 20; // Acertou s√≥ o pilar sem selecionar texto
+                feedbackColor = Color.green;
+                resultado = "Acertou apenas o pilar.";
+                sFXManager.PlaySFX(1);
+                displayEmail.CallResultFeedback("Correto", "Acertou sem selecao");
+            } else if (emailData.hasEthicalIssue) {
+                pontos = 10; // Pelo menos percebeu que havia um problema
+                feedbackColor = Color.yellow;
+                resultado = "H√° problema √©tico, mas errou o pilar.";
+                displayEmail.CallResultFeedback("Quase", "Errou pilar sem selecao");
+            } else {
+                pontos = -5; // O email era √©tico e foi marcado como problem√°tico
+                sFXManager.PlaySFX(2);
+                displayEmail.CallResultFeedback("Errado", "Rejeitou etico");
+                resultado = "O email n√£o cont√©m problema √©tico.";
+            }
         }
 
+        jaVerificouEsseEmail = true;
         scoreManager.AddScore(pontos);
         StartCoroutine(displayEmail.FlashColor(feedbackColor));
         emailManager.SaveEmailToHistory(feedbackColor);
-
-        // **Registrar no histÛrico**
-        FindObjectOfType<EmailManager>().RegisterDecision(selectedText, tipoProblema, resultado);
-
+        emailManager.RegisterDecision(selectedText, tipoProblema, resultado);
         StartCoroutine(displayEmail.CloseEmail(1.5f));
+    }
+
+    public void NovoEmailCarregado() {
+        jaVerificouEsseEmail = false;
+    }
+
+    private IEnumerator ResetCheckCooldown() {
+        yield return new WaitForSeconds(checkCooldown);
+        isChecking = false;
     }
 
     private string GetSelectedText() {
@@ -140,7 +166,7 @@ public class PillarCheck : MonoBehaviour {
     }
 
     /*private bool IsSimilar(string selected, string problem) {
-        if (problem.Contains(selected)) return true; // Se o trecho exato estiver dentro do problema, j? conta.
+        if (problem.Contains(selected)) return true; // Se o trecho exato estiver dentro do problema, jÔøΩ conta.
 
         int maxMatchingChars = 0;
 
@@ -159,7 +185,7 @@ public class PillarCheck : MonoBehaviour {
 
     private bool IsSimilar(string selected, List<string> problems) {
         foreach (string problem in problems) {
-            if (selected.Contains(problem)) return true; // Se contÈm exatamente um dos problemas, j· aceita.
+            if (selected.Contains(problem)) return true; // Se cont√©m exatamente um dos problemas, j√° aceita.
 
             int matchingChars = 0;
             int minLength = Mathf.Min(selected.Length, problem.Length);
