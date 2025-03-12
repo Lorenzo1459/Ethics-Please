@@ -111,7 +111,7 @@ public class ScoreManager : MonoBehaviour {
             panelRectTransform.anchorMin = new Vector2(0.5f, 0.5f);
             panelRectTransform.anchorMax = new Vector2(0.5f, 0.5f);
             panelRectTransform.pivot = new Vector2(0.5f, 0.5f);
-            panelRectTransform.sizeDelta = new Vector2(600, 500);
+            panelRectTransform.sizeDelta = new Vector2(500, 400);
 
             Image panelImage = panel.AddComponent<Image>();
             panelImage.color = new Color(0.8f, 0.8f, 0.8f, 0.9f);
@@ -125,7 +125,7 @@ public class ScoreManager : MonoBehaviour {
             textRectTransform.sizeDelta = new Vector2(500, 400);
 
             TextMeshProUGUI text = textObject.AddComponent<TextMeshProUGUI>();
-            text.text = $"=== Estatísticas===\n" +
+            text.text = $"=== Estatísticas===\n\n" +
                         $"Tempo de jogo - {tempoTotalFormatado}\n" +
                         $"E-mails aceitos: {emailsAceitos}\n" +
                         $"E-mails rejeitados: {emailsRejeitados}\n" +
@@ -138,6 +138,7 @@ public class ScoreManager : MonoBehaviour {
             text.fontSize = 28;
             text.color = Color.black;
             text.alignment = TextAlignmentOptions.Center;
+            text.verticalAlignment = VerticalAlignmentOptions.Top;
 
             isShowingStats = true;
         }
