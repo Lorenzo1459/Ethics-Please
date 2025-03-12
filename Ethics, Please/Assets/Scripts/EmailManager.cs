@@ -43,6 +43,15 @@ public class EmailManager : MonoBehaviour {
         }
     }
 
+    private void Update() {
+        /*if (Input.GetKeyDown(KeyCode.Space)) {
+            ShowNextEmail();
+        }
+        if (displayEmail.IsEmailOpen() == true && Input.GetKeyDown(KeyCode.Escape)) {
+            StartCoroutine(displayEmail.CloseEmail(0f));
+        }*/
+    }
+
     private void ShuffleEmailIndices() {
         for (int i = 0; i < indexList.Count; i++) {
             int tmp = indexList[i];

@@ -116,6 +116,8 @@ public class DisplayEmail : MonoBehaviour {
 
         if (currentProposal.hasEthicalIssue) {
             Debug.Log("Você aceitou um e-mail problemático! Isso terá consequências...");
+            scoreManager.RegistrarEmailAceito(false);
+            scoreManager.RegistrarPenalizacao();
             StartCoroutine(FlashColor(Color.red));
             sFXManager.PlaySFX(2); // 2 - Errado
             emailManager.SaveEmailToHistory(Color.red);
@@ -123,6 +125,7 @@ public class DisplayEmail : MonoBehaviour {
             scoreManager.AddScore(currentProposal.nivelProblema == NivelProblema.Leve ? -15 : -30);
         } else {
             Debug.Log("Bom trabalho! Você aceitou um e-mail ético.");
+            scoreManager.RegistrarEmailAceito(true);
             StartCoroutine(FlashColor(Color.green));
             sFXManager.PlaySFX(1); // 1 - Certo
             emailManager.SaveEmailToHistory(Color.green);
@@ -134,19 +137,26 @@ public class DisplayEmail : MonoBehaviour {
     }
 
     public void RejectEmail() {
+        if (scoreManager.GetCurrentScore() >= 200) {
+            CallResultFeedback("Tente novamente", "Usar pilares");
+            return;
+        }
         if (isProcessingDecision || currentProposal == null) return; // Evita cliques múltiplos
 
         isProcessingDecision = true; // Bloqueia cliques adicionais
 
         if (currentProposal.hasEthicalIssue) {
             Debug.Log("Você corretamente rejeitou um e-mail problemático!");
+            scoreManager.RegistrarEmailRejeitado(true);
             StartCoroutine(FlashColor(Color.green));
             sFXManager.PlaySFX(1); // 1 - Certo
             emailManager.SaveEmailToHistory(Color.green);
             CallResultFeedback("Correto", "Rejeitou antietico");
-            scoreManager.AddScore(10);
+            scoreManager.AddScore(20);
         } else {
             Debug.Log("Você rejeitou um e-mail legítimo...");
+            scoreManager.RegistrarEmailRejeitado(false);
+            scoreManager.RegistrarPenalizacao();
             StartCoroutine(FlashColor(Color.red));
             sFXManager.PlaySFX(2); // 2 - Errado
             emailManager.SaveEmailToHistory(Color.red);
@@ -226,6 +236,9 @@ public class DisplayEmail : MonoBehaviour {
                 break;
             case "Selecao pequena":
                 resultFeedback.GetComponentInChildren<TMP_Text>().text = "Seleção muito pequena! Tente selecionar um trecho maior.";
+                break;
+            case "Usar pilares":
+                resultFeedback.GetComponentInChildren<TMP_Text>().text = "À partir de agora, precisamos que você justifique suas recusas utilizando o guia!";
                 break;
             default:
                 Debug.Log("Caso não encontrado.");

@@ -82,28 +82,36 @@ public class PillarCheck : MonoBehaviour {
             bool acertouTipoProblema = emailData.tipoProblema == tipoProblema;
 
             if (isSelectionCorrect && acertouTipoProblema) {
-                pontos = 30; // Máximo de pontos por acertar tudo
+                pontos = 60; // Máximo de pontos por acertar tudo
+                scoreManager.RegistrarEmailRejeitado(true);
+                scoreManager.RegistrarPilarCorreto();
                 feedbackColor = Color.green;
                 resultado = "Correto";
                 sFXManager.PlaySFX(1);
                 displayEmail.CallResultFeedback("Correto", "Acertou ambos");
             } else if (!isSelectionCorrect && acertouTipoProblema) {
-                pontos = 15; // Acertou o pilar, mas não o trecho
+                pontos = 40; // Acertou o pilar, mas não o trecho
+                scoreManager.RegistrarEmailRejeitado(true);
+                scoreManager.RegistrarPilarCorreto();
                 feedbackColor = Color.yellow;
                 resultado = "Acertou o pilar, errou o trecho.";
                 displayEmail.CallResultFeedback("Quase", "Errou trecho");
             } else if (isSelectionCorrect && !acertouTipoProblema) {
-                pontos = 15; // Acertou o trecho, mas errou o pilar
+                pontos = 25; // Acertou o trecho, mas errou o pilar
+                scoreManager.RegistrarEmailRejeitado(true);
                 feedbackColor = Color.yellow;
                 resultado = "Acertou o trecho, mas errou o pilar.";
                 displayEmail.CallResultFeedback("Quase", "Errou pilar");
             } else if (emailData.hasEthicalIssue) {
-                pontos = 10; // Pelo menos percebeu que havia um problema
+                pontos = 15; // Pelo menos percebeu que havia um problema
+                scoreManager.RegistrarEmailRejeitado(true);
                 feedbackColor = Color.yellow;
                 resultado = "Há problema ético, mas não nesse trecho e nem nesse pilar.";
                 displayEmail.CallResultFeedback("Quase", "Errou ambos");
             } else {
-                pontos = -5; // O email era ético, mas foi marcado como problemático
+                pontos = -15; // O email era ético, mas foi marcado como problemático
+                scoreManager.RegistrarEmailRejeitado(false);
+                scoreManager.RegistrarPenalizacao();
                 sFXManager.PlaySFX(2);
                 displayEmail.CallResultFeedback("Errado", "Rejeitou etico");
                 resultado = "O email não contém problema ético.";
@@ -113,18 +121,23 @@ public class PillarCheck : MonoBehaviour {
             bool acertouTipoProblema = emailData.tipoProblema == tipoProblema;
 
             if (acertouTipoProblema) {
-                pontos = 20; // Acertou só o pilar sem selecionar texto
+                pontos = 50; // Acertou só o pilar sem selecionar texto
+                scoreManager.RegistrarEmailRejeitado(true);
+                scoreManager.RegistrarPilarCorreto();
                 feedbackColor = Color.green;
                 resultado = "Acertou apenas o pilar.";
                 sFXManager.PlaySFX(1);
                 displayEmail.CallResultFeedback("Correto", "Acertou sem selecao");
             } else if (emailData.hasEthicalIssue) {
-                pontos = 10; // Pelo menos percebeu que havia um problema
+                pontos = 25; // Pelo menos percebeu que havia um problema
+                scoreManager.RegistrarEmailRejeitado(true);                
                 feedbackColor = Color.yellow;
                 resultado = "Há problema ético, mas errou o pilar.";
                 displayEmail.CallResultFeedback("Quase", "Errou pilar sem selecao");
             } else {
-                pontos = -5; // O email era ético e foi marcado como problemático
+                pontos = -15; // O email era ético e foi marcado como problemático
+                scoreManager.RegistrarEmailRejeitado(false);
+                scoreManager.RegistrarPenalizacao();
                 sFXManager.PlaySFX(2);
                 displayEmail.CallResultFeedback("Errado", "Rejeitou etico");
                 resultado = "O email não contém problema ético.";
@@ -141,6 +154,25 @@ public class PillarCheck : MonoBehaviour {
 
     public void NovoEmailCarregado() {
         jaVerificouEsseEmail = false;
+
+        // Reseta a seleção do input field
+        if (emailInputField != null) {
+            // Força a limpeza da seleção
+            emailInputField.selectionAnchorPosition = 0;
+            emailInputField.selectionFocusPosition = 0;
+            emailInputField.caretPosition = 0;
+
+            // Remove o foco do campo de texto, se estiver focado
+            if (emailInputField.isFocused) {
+                emailInputField.DeactivateInputField();
+            }
+
+            // Força a atualização do campo de texto
+            emailInputField.ForceLabelUpdate();
+
+            // Reativa o inputField para permitir interação
+            emailInputField.ActivateInputField();
+        }
     }
 
     private IEnumerator ResetCheckCooldown() {
