@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class EmailManager : MonoBehaviour {
     public ProposalDatabase proposalDatabase;
     private SFXManager sFXManager;
+    private ScoreManager scoreManager;
     public TMP_Text emailCountText; // Contador de e-mails no botão
     public GameObject historyPanel; // Painel do histórico
     public Transform historyContent; // Parent dos botões do histórico
@@ -19,14 +20,22 @@ public class EmailManager : MonoBehaviour {
 
     private int emailCount = 0;
     private float emailCooldown = 10f;
+    private float initialEmailCooldown = 14f; // Cooldown inicial
+    private float minEmailCooldown = 6f; // Cooldown mínimo
+    private float lastScoreCheck = 0; // Última pontuação verificada
+
+    private bool isTutorialActive = true; // Controla se o tutorial está ativo
+
     private DisplayEmail displayEmail;
     private ProposalData currentEmailData;
 
     private void Start() {
         displayEmail = FindObjectOfType<DisplayEmail>();
         sFXManager = FindObjectOfType<SFXManager>();
+        scoreManager = FindObjectOfType<ScoreManager>();
 
         sFXManager.SetVolume(.3f);
+        emailCooldown = initialEmailCooldown;
 
         for (int i = 0; i < proposalDatabase.proposals.Count; i++) {
             indexList.Add(i);
@@ -44,12 +53,27 @@ public class EmailManager : MonoBehaviour {
     }
 
     private void Update() {
+        CheckScoreAndAdjustCooldown();
         /*if (Input.GetKeyDown(KeyCode.Space)) {
             ShowNextEmail();
         }
         if (displayEmail.IsEmailOpen() == true && Input.GetKeyDown(KeyCode.Escape)) {
             StartCoroutine(displayEmail.CloseEmail(0f));
         }*/
+    }
+
+    private void CheckScoreAndAdjustCooldown() {
+        float currentScore = scoreManager.GetCurrentScore();
+
+        // Verifica se a pontuação aumentou em 100 pontos desde a última verificação
+        if (currentScore >= lastScoreCheck + 100) {
+            lastScoreCheck = currentScore;
+
+            // Reduz o cooldown em 1 segundo a cada 100 pontos, mas não abaixo do mínimo
+            emailCooldown = Mathf.Max(minEmailCooldown, initialEmailCooldown - (currentScore / 100));
+
+            Debug.Log($"Pontuação: {currentScore}, Novo Cooldown: {emailCooldown}");
+        }
     }
 
     private void ShuffleEmailIndices() {
@@ -70,12 +94,21 @@ public class EmailManager : MonoBehaviour {
     private IEnumerator GenerateEmailsOverTime() {
         while (true) {
             yield return new WaitForSeconds(emailCooldown);
+
+            if (isTutorialActive) {
+                continue;
+            }
+
             if (emailQueue.Count > 0) {
                 emailCount++;
                 sFXManager.PlaySFX(0); // 0 - New Email
                 UpdateEmailCountUI();
             }
         }
+    }
+
+    public void SetTutorialActive(bool isActive) {
+        isTutorialActive = isActive;
     }
 
     private void UpdateEmailCountUI() {

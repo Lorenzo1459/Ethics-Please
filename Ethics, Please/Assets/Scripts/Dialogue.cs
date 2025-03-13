@@ -15,6 +15,7 @@ public class Dialogue : MonoBehaviour {
     public TextMeshProUGUI textComponent;
     public List<DialogueLine> dialogueLines; // Lista de linhas de diálogo com popUps associados
     private SFXManager sFXManager;
+    private EmailManager emailManager;
     public float textSpeed;
 
     //Skip tuto
@@ -27,6 +28,12 @@ public class Dialogue : MonoBehaviour {
     void Start() {
         textComponent.text = string.Empty;
         sFXManager = FindObjectOfType<SFXManager>();
+        emailManager = FindObjectOfType<EmailManager>();
+
+        if (emailManager != null) {
+            emailManager.SetTutorialActive(true);
+        }
+
         StartDialogue();
     }
 
@@ -50,7 +57,7 @@ public class Dialogue : MonoBehaviour {
 
             // Se o jogador segurou Enter por 3 segundos, pula o tutorial
             if (enterHoldTime >= holdDuration) {
-                SkipTutorial();
+                SkipTutorial();                
                 return; // Sai do método para evitar conflitos
             }
         } else {
@@ -66,6 +73,7 @@ public class Dialogue : MonoBehaviour {
         sFXManager.StopSFX(); // Para o som
         DeactivateAllPopUps(); // Desativa todos os popUps
         skipTutoImg.fillAmount = 0f;
+        emailManager.SetTutorialActive(false);
         gameObject.SetActive(false); // Desativa o objeto do tutorial
     }
 
@@ -100,6 +108,8 @@ public class Dialogue : MonoBehaviour {
         } else {
             // Desativa todos os popUps ao finalizar o diálogo
             DeactivateAllPopUps();
+
+            emailManager.SetTutorialActive(false);
             gameObject.SetActive(false); // Desativa o GameObject do diálogo
         }
     }
