@@ -22,7 +22,6 @@ public class Dialogue : MonoBehaviour {
     private const float holdDuration = 2f; // Tempo necessário para pular o tutorial (2 segundos)
     public Image skipTutoImg;
 
-
     private int index;
 
     void Start() {
@@ -71,6 +70,7 @@ public class Dialogue : MonoBehaviour {
     }
 
     void StartDialogue() {
+        textComponent.text = string.Empty; // Limpa o texto antes de começar
         index = 0;
         StartCoroutine(TypeLine());
     }
@@ -86,7 +86,7 @@ public class Dialogue : MonoBehaviour {
         sFXManager.PlaySFXLoop(3);
         // Digita a linha de diálogo caractere por caractere
         foreach (char c in dialogueLines[index].line.ToCharArray()) {
-            textComponent.text += c;            
+            textComponent.text += c;
             yield return new WaitForSeconds(textSpeed);
         }
         sFXManager.StopSFX();
@@ -100,7 +100,7 @@ public class Dialogue : MonoBehaviour {
         } else {
             // Desativa todos os popUps ao finalizar o diálogo
             DeactivateAllPopUps();
-            gameObject.SetActive(false);
+            gameObject.SetActive(false); // Desativa o GameObject do diálogo
         }
     }
 
@@ -110,5 +110,17 @@ public class Dialogue : MonoBehaviour {
                 dialogueLine.popUp.SetActive(false);
             }
         }
+    }
+
+    public void RestartTutorial() {
+        // Reativa o GameObject do diálogo (caso esteja desativado)
+        gameObject.SetActive(true);
+
+        StopAllCoroutines(); // Para a digitação do texto atual
+        sFXManager.StopSFX(); // Para o som
+        DeactivateAllPopUps(); // Desativa todos os popUps
+        textComponent.text = string.Empty; // Limpa o texto atual
+        index = 0; // Reinicia o índice para a primeira linha
+        StartDialogue(); // Começa o diálogo novamente
     }
 }

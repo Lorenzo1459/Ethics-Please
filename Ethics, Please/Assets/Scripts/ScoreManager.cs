@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class ScoreManager : MonoBehaviour {
     public TMP_Text ethicalScore;
-    public float score = 0;
+    public float score = 0;    
 
     // Estatísticas de jogo
     private int emailsAceitos = 0;
@@ -32,7 +32,7 @@ public class ScoreManager : MonoBehaviour {
         UpdateScoreText();
         if(Input.GetKeyDown(KeyCode.Escape)) {
             MostrarEstatisticasUI();
-        }
+        }        
     }
 
     public void AddScore(float value) {
