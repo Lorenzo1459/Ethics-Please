@@ -20,8 +20,8 @@ public class EmailManager : MonoBehaviour {
 
     private int emailCount = 0;
     private float emailCooldown = 10f;
-    private float initialEmailCooldown = 14f; // Cooldown inicial
-    private float minEmailCooldown = 6f; // Cooldown mínimo
+    private float initialEmailCooldown = 20f; // Cooldown inicial
+    private float minEmailCooldown = 10f; // Cooldown mínimo
     private float lastScoreCheck = 0; // Última pontuação verificada
 
     private bool isTutorialActive = true; // Controla se o tutorial está ativo
@@ -34,7 +34,7 @@ public class EmailManager : MonoBehaviour {
         sFXManager = FindObjectOfType<SFXManager>();
         scoreManager = FindObjectOfType<ScoreManager>();
 
-        sFXManager.SetVolume(.3f);
+        sFXManager.SetVolume(.15f);
         emailCooldown = initialEmailCooldown;
 
         for (int i = 0; i < proposalDatabase.proposals.Count; i++) {
@@ -70,7 +70,7 @@ public class EmailManager : MonoBehaviour {
             lastScoreCheck = currentScore;
 
             // Reduz o cooldown em 1 segundo a cada 100 pontos, mas não abaixo do mínimo
-            emailCooldown = Mathf.Max(minEmailCooldown, initialEmailCooldown - (currentScore / 100));
+            emailCooldown = Mathf.Max(minEmailCooldown, initialEmailCooldown - (currentScore / 50));
 
             Debug.Log($"Pontuação: {currentScore}, Novo Cooldown: {emailCooldown}");
         }

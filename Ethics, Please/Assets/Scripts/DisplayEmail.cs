@@ -137,7 +137,7 @@ public class DisplayEmail : MonoBehaviour {
     }
 
     public void RejectEmail() {
-        if (scoreManager.GetCurrentScore() >= 200) {
+        if (scoreManager.GetCurrentScore() >= 150) {
             CallResultFeedback("Tente novamente", "Usar pilares");
             return;
         }
@@ -238,7 +238,7 @@ public class DisplayEmail : MonoBehaviour {
                 resultFeedback.GetComponentInChildren<TMP_Text>().text = "Seleção muito pequena! Tente selecionar um trecho maior.";
                 break;
             case "Usar pilares":
-                resultFeedback.GetComponentInChildren<TMP_Text>().text = "À partir de agora, precisamos que você justifique suas recusas utilizando o guia!";
+                resultFeedback.GetComponentInChildren<TMP_Text>().text = "À partir de agora, justifique sua recusa usando os pilares éticos!";
                 break;
             default:
                 Debug.Log("Caso não encontrado.");

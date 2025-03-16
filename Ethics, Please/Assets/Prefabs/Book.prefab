@@ -4194,7 +4194,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 330823180753622034}
         m_TargetAssemblyTypeName: PillarCheck, Assembly-CSharp
-        m_MethodName: ViesCheck
+        m_MethodName: FalibilidadeCheck
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4745,7 +4745,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 330823180753622034}
         m_TargetAssemblyTypeName: PillarCheck, Assembly-CSharp
-        m_MethodName: ViesCheck
+        m_MethodName: OpacidadeCheck
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

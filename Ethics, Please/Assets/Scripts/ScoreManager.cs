@@ -6,8 +6,12 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class ScoreManager : MonoBehaviour {
-    public TMP_Text ethicalScore;
-    public float score = 0;    
+    public TMP_Text ethicalScore;    
+    public GameObject endgamePanel;    
+    private DisplayEmail displayEmail;
+    private PillarCheck pillarCheck;
+    public GameObject historyPanel;
+    public float score = 0;
 
     // Estatísticas de jogo
     private int emailsAceitos = 0;
@@ -22,17 +26,24 @@ public class ScoreManager : MonoBehaviour {
     private float tempoTotalJogo = 0;
     private int numeroDecisoes = 0;
 
+    private GameObject statsPanel; // Referência ao painel de estatísticas
+    private bool zerouJogo = false;
+
     void Start() {
+        displayEmail = FindObjectOfType<DisplayEmail>();
+        pillarCheck = FindObjectOfType<PillarCheck>();        
         tempoTotalJogo = 0;
         UpdateScoreText();
+        endgamePanel.SetActive(false);                         
     }
 
     void Update() {
         tempoTotalJogo += Time.deltaTime;
         UpdateScoreText();
-        if(Input.GetKeyDown(KeyCode.Escape)) {
+
+        if (Input.GetKeyDown(KeyCode.Escape)) {
             MostrarEstatisticasUI();
-        }        
+        }
     }
 
     public void AddScore(float value) {
@@ -45,9 +56,21 @@ public class ScoreManager : MonoBehaviour {
             totalPontosFeitos += value;
         }
 
-        // Verifica se o jogo atingiu 1000 pontos para exibir estatísticas finais
-        if (score >= 500) {
+        // Verifica se o jogo atingiu 500 pontos para exibir estatísticas finais e "FIM DE JOGO"
+        if (score >= 500 && zerouJogo == false) {
+            StartCoroutine(Wait(1.5f));
+            zerouJogo = true;
             MostrarEstatisticasUI();
+            endgamePanel.SetActive(true);            
+            if (pillarCheck.gameObject.activeInHierarchy == true) {
+                pillarCheck.gameObject.SetActive(false);
+            }
+            if (historyPanel.activeSelf == true) {
+                historyPanel.SetActive(false);
+            }
+            if (displayEmail.IsEmailOpen() == true) {
+                StartCoroutine(displayEmail.CloseEmail(.5f));
+            }
         }
     }
 
@@ -85,14 +108,14 @@ public class ScoreManager : MonoBehaviour {
     public void RegistrarTempoDecisao(float tempo) {
         tempoTotalDecisoes += tempo;
         numeroDecisoes++;
-    }    
+    }
 
     private bool isShowingStats = false;
 
     private void MostrarEstatisticasUI() {
         if (isShowingStats) {
-            // Remove the UI if it is already being shown
-            Destroy(GameObject.Find("StatsPanel"));
+            // Remove o painel de estatísticas se já estiver sendo exibido
+            Destroy(statsPanel);
             isShowingStats = false;
         } else {
             float tempoMedio = numeroDecisoes > 0 ? tempoTotalDecisoes / numeroDecisoes : 0;
@@ -100,13 +123,13 @@ public class ScoreManager : MonoBehaviour {
             TimeSpan tempoTotal = TimeSpan.FromSeconds(tempoTotalJogo);
             string tempoTotalFormatado = tempoTotal.ToString(@"hh\:mm\:ss");
 
-            // Create UI to display the results
-            GameObject uiCanvas = new GameObject("StatsPanel");
-            Canvas canvas = uiCanvas.AddComponent<Canvas>();
+            // Cria o painel de estatísticas
+            statsPanel = new GameObject("StatsPanel");
+            Canvas canvas = statsPanel.AddComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
 
             GameObject panel = new GameObject("Panel");
-            panel.transform.SetParent(uiCanvas.transform, false);
+            panel.transform.SetParent(statsPanel.transform, false);
             RectTransform panelRectTransform = panel.AddComponent<RectTransform>();
             panelRectTransform.anchorMin = new Vector2(0.5f, 0.5f);
             panelRectTransform.anchorMax = new Vector2(0.5f, 0.5f);
@@ -125,7 +148,7 @@ public class ScoreManager : MonoBehaviour {
             textRectTransform.sizeDelta = new Vector2(500, 400);
 
             TextMeshProUGUI text = textObject.AddComponent<TextMeshProUGUI>();
-            text.text = $"=== Estatísticas===\n\n" +
+            text.text = $"=== Estatísticas ===\n\n" +
                         $"Tempo de jogo - {tempoTotalFormatado}\n" +
                         $"E-mails aceitos: {emailsAceitos}\n" +
                         $"E-mails rejeitados: {emailsRejeitados}\n" +
@@ -133,8 +156,7 @@ public class ScoreManager : MonoBehaviour {
                         $"Decisões erradas: {decisoesErradas}\n" +
                         $"Pilares identificados corretamente: {pilaresCorretos}\n" +
                         $"Pontos totais: {totalPontosFeitos}\n" +
-                        $"Total em penalizações: {totalPenalizacoes}\n"; /* +
-                        $"Tempo médio por decisão: {tempoMedio:F2} segundos";*/
+                        $"Total em penalizações: {totalPenalizacoes}\n";
             text.fontSize = 28;
             text.color = Color.black;
             text.alignment = TextAlignmentOptions.Center;
@@ -142,6 +164,22 @@ public class ScoreManager : MonoBehaviour {
 
             isShowingStats = true;
         }
+    }
+
+    public void ContinueGame() {        
+        // Oculta o texto "FIM DE JOGO" e o botão "Continue"
+        endgamePanel.SetActive(false);
+        
+
+        // Remove o painel de estatísticas
+        if (statsPanel != null) {
+            Destroy(statsPanel);
+            isShowingStats = false;
+        }
+    }
+
+    private IEnumerator Wait(float delay) {
+        yield return new WaitForSeconds(delay);        
     }
 
     public float GetCurrentScore() {
