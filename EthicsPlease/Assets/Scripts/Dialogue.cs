@@ -43,7 +43,9 @@ public class Dialogue : MonoBehaviour {
                 NextLine();
             } else {
                 StopAllCoroutines();
-                sFXManager.StopSFX();
+                if (sFXManager != null) {
+                    sFXManager.StopSFX();
+                }
                 textComponent.text = dialogueLines[index].line;
             }
         }
@@ -108,8 +110,8 @@ public class Dialogue : MonoBehaviour {
         } else {
             // Desativa todos os popUps ao finalizar o diálogo
             DeactivateAllPopUps();
-
-            emailManager.SetTutorialActive(false);
+            if (emailManager!= null) emailManager.SetTutorialActive(false);
+            sFXManager.PlaySFXLoop(4);
             gameObject.SetActive(false); // Desativa o GameObject do diálogo
         }
     }

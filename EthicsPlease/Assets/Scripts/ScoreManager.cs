@@ -29,12 +29,15 @@ public class ScoreManager : MonoBehaviour {
     private GameObject statsPanel; // Referência ao painel de estatísticas
     private bool zerouJogo = false;
 
+    private void Awake() {
+        endgamePanel.SetActive(false);
+    }
+
     void Start() {
         displayEmail = FindObjectOfType<DisplayEmail>();
         pillarCheck = FindObjectOfType<PillarCheck>();        
         tempoTotalJogo = 0;
-        UpdateScoreText();
-        endgamePanel.SetActive(false);                         
+        UpdateScoreText();                        
     }
 
     void Update() {
