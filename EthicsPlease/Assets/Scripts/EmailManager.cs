@@ -12,6 +12,7 @@ public class EmailManager : MonoBehaviour {
     public GameObject historyPanel; // Painel do histórico
     public Transform historyContent; // Parent dos botões do histórico
     public Button historyButtonPrefab; // Prefab do botão de histórico
+    public GameObject historyNotifIcon;
 
     private Queue<int> emailQueue = new Queue<int>();
     private List<int> indexList = new List<int>();
@@ -43,8 +44,7 @@ public class EmailManager : MonoBehaviour {
 
         ShuffleEmailIndices();
         AddEmailsToQueue();
-
-        StartCoroutine(DelayedFirstEmail(3f));
+                
         StartCoroutine(GenerateEmailsOverTime());
 
         if (historyPanel == null || historyContent == null) {
@@ -123,6 +123,10 @@ public class EmailManager : MonoBehaviour {
             }
         }
     }
+    
+    public void CallDelayedEmail(float delay) {
+        StartCoroutine(DelayedFirstEmail(delay));
+    }
 
     private IEnumerator DelayedFirstEmail(float delay) {
         yield return new WaitForSeconds(delay);
@@ -185,6 +189,10 @@ public class EmailManager : MonoBehaviour {
     public void ToggleHistoryPanel() {
         if (historyPanel != null) {
             historyPanel.SetActive(!historyPanel.activeSelf);
+
+            if (historyPanel.activeSelf && historyNotifIcon != null) {
+                historyNotifIcon.SetActive(false);
+            }
         }
     }
 
@@ -198,6 +206,8 @@ public class EmailManager : MonoBehaviour {
         foreach (Transform child in historyContent) {
             child.gameObject.SetActive(false);
         }
+
+        if(historyPanel.activeSelf == false) historyNotifIcon.SetActive(true);
 
         // Aguarde um frame antes de recriar os botões (evita erros)
         StartCoroutine(GenerateHistoryButtons());

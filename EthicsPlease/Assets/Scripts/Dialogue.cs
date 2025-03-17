@@ -28,6 +28,7 @@ public class Dialogue : MonoBehaviour {
     void Start() {
         textComponent.text = string.Empty;
         sFXManager = FindObjectOfType<SFXManager>();
+        sFXManager.SetVolume(.1f);
         emailManager = FindObjectOfType<EmailManager>();
 
         if (emailManager != null) {
@@ -76,6 +77,7 @@ public class Dialogue : MonoBehaviour {
         DeactivateAllPopUps(); // Desativa todos os popUps
         skipTutoImg.fillAmount = 0f;
         emailManager.SetTutorialActive(false);
+        sFXManager.PlaySFXLoop(4);       
         gameObject.SetActive(false); // Desativa o objeto do tutorial
     }
 
