@@ -40,6 +40,9 @@ public class PillarCheck : MonoBehaviour {
     }
 
     public void CheckEthicalIssue(TipoProblema tipoProblema) {
+        if (!gameObject.activeInHierarchy) {
+            return;
+        }
         if (isChecking || jaVerificouEsseEmail) return;
         isChecking = true;
         StartCoroutine(ResetCheckCooldown());
@@ -233,6 +236,16 @@ public class PillarCheck : MonoBehaviour {
         }
 
         return false;
+    }
+
+    public void ResetPillarButtons() {
+        // Reativa todos os botões dos pilares
+        Button[] pillarButtons = GetComponentsInChildren<Button>(true); // Obtém todos os botões, incluindo os inativos
+        foreach (Button button in pillarButtons) {
+            button.interactable = true; // Torna os botões interativos novamente
+        }
+
+        Debug.Log("Botões dos pilares reativados.");
     }
 
     public void FalibilidadeCheck() {

@@ -169,16 +169,35 @@ public class ScoreManager : MonoBehaviour {
         }
     }
 
-    public void ContinueGame() {        
+
+    public void ContinueGame() {
         // Oculta o texto "FIM DE JOGO" e o botão "Continue"
         endgamePanel.SetActive(false);
-        
 
         // Remove o painel de estatísticas
         if (statsPanel != null) {
             Destroy(statsPanel);
             isShowingStats = false;
         }
+
+        // Reativa o painel de pilares e o painel de histórico, se necessário
+        if (pillarCheck != null && !pillarCheck.gameObject.activeInHierarchy) {
+            pillarCheck.gameObject.SetActive(true);
+        }
+
+        if (historyPanel != null && !historyPanel.activeSelf) {
+            historyPanel.SetActive(true);
+        }
+
+        // Reativa os botões dos pilares
+        if (pillarCheck != null) {
+            pillarCheck.ResetPillarButtons(); // Método para reativar os botões dos pilares
+        }
+
+        // Reseta o estado do jogo para permitir que o jogador continue
+        //zerouJogo = false; // Permite que o jogo continue além de 500 pontos
+
+        Debug.Log("Jogo continuado. Botões dos pilares reativados.");
     }
 
     private IEnumerator Wait(float delay) {

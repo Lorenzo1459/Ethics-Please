@@ -61,6 +61,11 @@ public class DisplayEmail : MonoBehaviour {
 
             currentProposal = proposal;
             currentEmailIndex = index;
+
+            // Resetar a posição do ScrollRect para o topo
+            if (scrollRect != null) {
+                scrollRect.verticalNormalizedPosition = 1f; // 1 = topo, 0 = fundo
+            }
         }
 
         pillarCheck.NovoEmailCarregado();
@@ -80,20 +85,30 @@ public class DisplayEmail : MonoBehaviour {
         projectDescriptionText.text = proposal.projectDescription.Replace("\\n", "\n");
 
         currentProposal = proposal;
+        
+        if (scrollRect != null) {
+            scrollRect.verticalNormalizedPosition = 1f; // 1 = topo, 0 = fundo
+        }
 
         SetButtonsVisibility(true);
     }
 
     public void DisplayEmailHistory(EmailHistoryEntry entry) {
         this.gameObject.SetActive(true);
-        companyNameText.text = entry.companyNameText; // Ou algum indicador visual
+        companyNameText.text = entry.companyNameText;
         projectTitleText.text = entry.emailTitleText;
         string highlightedText = emailManager.HighlightUnethicalParts(entry.emailText, entry.unethicalParts);
-        projectDescriptionText.text = highlightedText + entry.selectedText +
-            "\n\n✅ Problema correto: " + entry.correctProblem.ToString() +
-            "\n❌ Escolhido: " + entry.chosenProblem.ToString() +
-            "\nTrecho destacado: " + entry.selectedText + "\n\n" +
-            "\n\nResultado: " + entry.result + "\n\n";
+        projectDescriptionText.text =
+            "<b>Problema correto</b>: " + entry.correctProblem.ToString() +
+            "\n<b>Problema Escolhido:</b> " + entry.chosenProblem.ToString() +
+            "\n<b>Trecho escolhido:</b>" + entry.selectedText +            
+            "\n<b>Resultado:</b> " + entry.result + "\n\n" +
+            "<b>Corpo do e-mail:</b>\n"
+            + highlightedText;
+        
+        if (scrollRect != null) {
+            scrollRect.verticalNormalizedPosition = 1f; // 1 = topo, 0 = fundo
+        }
 
         SetButtonsVisibility(false);
     }
@@ -121,7 +136,7 @@ public class DisplayEmail : MonoBehaviour {
             scoreManager.RegistrarPenalizacao();
             StartCoroutine(FlashColor(Color.red));
             sFXManager.PlaySFX(2); // 2 - Errado
-            emailManager.SaveEmailToHistory(Color.red);
+            emailManager.SaveEmailToHistory(Color.red, "Aceitou problemático!");
             CallResultFeedback("Errado", "Aceitou antietico");
             scoreManager.AddScore(currentProposal.nivelProblema == NivelProblema.Leve ? -15 : -30);
         } else {
@@ -129,7 +144,7 @@ public class DisplayEmail : MonoBehaviour {
             scoreManager.RegistrarEmailAceito(true);
             StartCoroutine(FlashColor(Color.green));
             sFXManager.PlaySFX(1); // 1 - Certo
-            emailManager.SaveEmailToHistory(Color.green);
+            emailManager.SaveEmailToHistory(Color.green, "Aceitou ético!");
             CallResultFeedback("Correto", "Aceitou etico");
             scoreManager.AddScore(20);
         }
@@ -151,7 +166,7 @@ public class DisplayEmail : MonoBehaviour {
             scoreManager.RegistrarEmailRejeitado(true);
             StartCoroutine(FlashColor(Color.green));
             sFXManager.PlaySFX(1); // 1 - Certo
-            emailManager.SaveEmailToHistory(Color.green);
+            emailManager.SaveEmailToHistory(Color.green, "Recusou ético!");
             CallResultFeedback("Correto", "Rejeitou antietico");
             scoreManager.AddScore(20);
         } else {
@@ -160,7 +175,7 @@ public class DisplayEmail : MonoBehaviour {
             scoreManager.RegistrarPenalizacao();
             StartCoroutine(FlashColor(Color.red));
             sFXManager.PlaySFX(2); // 2 - Errado
-            emailManager.SaveEmailToHistory(Color.red);
+            emailManager.SaveEmailToHistory(Color.red, "Recusou problemático!");
             CallResultFeedback("Errado", "Rejeitou etico");
             scoreManager.AddScore(-10);
         }

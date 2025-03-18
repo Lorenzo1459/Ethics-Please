@@ -101,7 +101,9 @@ public class EmailManager : MonoBehaviour {
 
             if (emailQueue.Count > 0) {
                 emailCount++;
-                sFXManager.PlaySFX(0); // 0 - New Email
+                sFXManager.SetVolume(0.05f);
+                sFXManager.PlaySFX(0); // 0 - New Email                
+                sFXManager.SetVolume(0.15f);
                 UpdateEmailCountUI();
             }
         }
@@ -131,7 +133,9 @@ public class EmailManager : MonoBehaviour {
     private IEnumerator DelayedFirstEmail(float delay) {
         yield return new WaitForSeconds(delay);
         emailCount++;
+        sFXManager.SetVolume(0.05f);
         sFXManager.PlaySFX(0); // 0 - New Email
+        sFXManager.SetVolume(0.15f);
         UpdateEmailCountUI();
     }
 
@@ -243,7 +247,7 @@ public class EmailManager : MonoBehaviour {
         return emailHistory;
     }
 
-    public void SaveEmailToHistory(Color buttonColor) {
+    public void SaveEmailToHistory(Color buttonColor, string result = "Pendente") {
         int emailIndex = emailHistory.Count;
         emailHistory.Add(new EmailHistoryEntry(
             currentEmailData.companyName,
@@ -252,7 +256,7 @@ public class EmailManager : MonoBehaviour {
             "", // Ainda sem seleção
             currentEmailData.tipoProblema,
             TipoProblema.Nenhum, // Sem resposta ainda
-            "Pendente",
+            result,
             currentEmailData.trechoAntietico
         ));
 
